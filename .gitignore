@@ -1,0 +1,26 @@
+# Credentials — JANGAN di-push
+.env
+
+# Data source Excel (file besar, data internal)
+*.xlsx
+*.xls
+referensi/
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
