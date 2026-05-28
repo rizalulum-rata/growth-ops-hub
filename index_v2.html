@@ -2018,7 +2018,7 @@
       if (!teamData) return '';
       const tabs = Object.keys(teamData);
       return tabs.map(tab =>
-        `<button class="snav-tab${tab === cSec ? ' on' : ''}" onclick="pickTab(${JSON.stringify(tab)}, this)">${escHtml(tab)}</button>`
+        `<button class="snav-tab${tab === cSec ? ' on' : ''}" onclick="pickTab(${escHtml(JSON.stringify(tab))}, this)">${escHtml(tab)}</button>`
       ).join('');
     }
 
@@ -2027,7 +2027,7 @@
       const subs = Object.keys(sectionData);
       if (!subs.length) return '';
       return `<div class="snav-sub">${subs.map(sub =>
-        `<button class="snav-sub-btn${sub === cSub ? ' on' : ''}" onclick="pickSub(${JSON.stringify(sub)})">${escHtml(sub)}</button>`
+        `<button class="snav-sub-btn${sub === cSub ? ' on' : ''}" onclick="pickSub(${escHtml(JSON.stringify(sub))})">${escHtml(sub)}</button>`
       ).join('')}</div>`;
     }
 
