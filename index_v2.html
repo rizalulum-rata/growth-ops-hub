@@ -1702,9 +1702,24 @@
   <script src="libs/mermaid.min.js"></script>
   <script src="libs/echarts.min.js"></script>
   <script src="libs/cytoscape.min.js"></script>
-  <script src="data.js?v=2"></script>
+  <script src="data.js"></script>
   <script src="dashboard_data.js"></script>
   <script>
+    // Visual Error Handler for local debugging & pair programming
+    window.onerror = function (msg, url, lineNo, columnNo, error) {
+      const banner = document.createElement('div');
+      banner.style.cssText = 'position:fixed;top:0;left:0;width:100%;background:#ef4444;color:white;padding:12px 20px;z-index:999999;font-family:system-ui,-apple-system,sans-serif;font-size:13px;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,0.15);display:flex;justify-content:space-between;align-items:center;line-height:1.4;';
+      banner.innerHTML = `<div><strong>🚨 JS Error:</strong> ${msg} (Line ${lineNo}:${columnNo} in ${url ? url.split('/').pop() : 'inline'})</div><button onclick="this.parentElement.remove()" style="background:transparent;border:none;color:white;cursor:pointer;font-weight:bold;margin-left:20px;font-size:16px;">✕</button>`;
+      document.body.appendChild(banner);
+      return false;
+    };
+    window.onunhandledrejection = function (event) {
+      const banner = document.createElement('div');
+      banner.style.cssText = 'position:fixed;top:0;left:0;width:100%;background:#f97316;color:white;padding:12px 20px;z-index:999999;font-family:system-ui,-apple-system,sans-serif;font-size:13px;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,0.15);display:flex;justify-content:space-between;align-items:center;line-height:1.4;';
+      banner.innerHTML = `<div><strong>⚠️ Promise Rejection:</strong> ${event.reason}</div><button onclick="this.parentElement.remove()" style="background:transparent;border:none;color:white;cursor:pointer;font-weight:bold;margin-left:20px;font-size:16px;">✕</button>`;
+      document.body.appendChild(banner);
+    };
+
     if (typeof DASHBOARD_BLOCKS === 'undefined') {
       var DASHBOARD_BLOCKS = [{ type: 'alert', level: 'warn', html: 'dashboard_data.js tidak ditemukan.' }];
     }
@@ -1993,6 +2008,9 @@
     function escHtml(s) {
       return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
+    function escAttr(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
 
     function buildSubnav(brand, team) {
       const teamData = DATA[brand]?.[team];
@@ -2018,7 +2036,7 @@
       if (!teamData) return '';
       const tabs = Object.keys(teamData);
       return tabs.map(tab =>
-        `<button class="snav-tab${tab === cSec ? ' on' : ''}" onclick="pickTab(${escHtml(JSON.stringify(tab))}, this)">${escHtml(tab)}</button>`
+        `<button class="snav-tab${tab === cSec ? ' on' : ''}" data-sec="${escAttr(tab)}" onclick="pickTab(this.getAttribute('data-sec'), this)">${escHtml(tab)}</button>`
       ).join('');
     }
 
@@ -2027,7 +2045,7 @@
       const subs = Object.keys(sectionData);
       if (!subs.length) return '';
       return `<div class="snav-sub">${subs.map(sub =>
-        `<button class="snav-sub-btn${sub === cSub ? ' on' : ''}" onclick="pickSub(${escHtml(JSON.stringify(sub))})">${escHtml(sub)}</button>`
+        `<button class="snav-sub-btn${sub === cSub ? ' on' : ''}" data-sub="${escAttr(sub)}" onclick="pickSub(this.getAttribute('data-sub'))">${escHtml(sub)}</button>`
       ).join('')}</div>`;
     }
 
