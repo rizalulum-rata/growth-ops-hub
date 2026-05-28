@@ -14,8 +14,7 @@
   <link rel="stylesheet" href="libs/datatables.min.css">
   <style>
     :root {
-      --sw: 280px;
-      --nw: 240px;
+      --sw: 240px;
       --hh: 56px;
       --bg: #f5f5f7;
       --sur: rgba(255, 255, 255, 0.65);
@@ -69,14 +68,14 @@
     #topbar {
       position: fixed;
       top: 16px;
-      left: calc(var(--sw) + 40px);
-      right: calc(var(--sw) + 40px);
+      left: calc(var(--sw) + 28px);
+      right: 32px;
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       height: 56px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.55);
+      backdrop-filter: blur(24px) saturate(200%);
+      -webkit-backdrop-filter: blur(24px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.5);
       border-radius: 20px;
       z-index: 500;
       display: flex;
@@ -87,23 +86,10 @@
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    body.shifted #topbar {
-      left: calc(var(--sw) + var(--nw) + 64px);
-    }
-
-    body.aside-minimized #topbar {
-      right: 88px;
-    }
-
-    body.aside-minimized.shifted #topbar {
-      left: calc(var(--sw) + var(--nw) + 40px);
-      right: 88px;
-    }
-
     body.present #topbar {
       left: 20px;
       right: 20px;
-      max-width: 1060px;
+      max-width: 1100px;
       margin: 0 auto;
     }
 
@@ -366,13 +352,108 @@
       background: rgba(168, 85, 247, 0.1);
     }
 
-    /* SUBNAV */
+    /* INLINE SECTION TABS */
+    .snav-inline {
+      display: flex;
+      gap: 2px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+      padding: 5px;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 14px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+      position: sticky;
+      top: 80px;
+      z-index: 100;
+    }
+
+    .snav-tab {
+      padding: 8px 16px;
+      border-radius: 10px;
+      border: none;
+      background: transparent;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--t2);
+      cursor: pointer;
+      transition: all 0.18s;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+
+    .snav-tab:hover {
+      background: rgba(0, 0, 0, 0.04);
+      color: var(--t1);
+    }
+
+    .snav-tab.on {
+      background: #fff;
+      color: var(--act);
+      font-weight: 600;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
+    }
+
+    .snav-sub {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .snav-sub-btn {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      background: rgba(255, 255, 255, 0.7);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--t2);
+      cursor: pointer;
+      transition: all 0.18s;
+      font-family: inherit;
+    }
+
+    .snav-sub-btn:hover {
+      background: #fff;
+      color: var(--t1);
+      border-color: rgba(0, 0, 0, 0.15);
+    }
+
+    .snav-sub-btn.on {
+      background: var(--acbg);
+      color: var(--act);
+      border-color: var(--act);
+      font-weight: 600;
+    }
+
+    /* SIDEBAR SECTION LABELS */
+    .sidebar-section-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.9px;
+      color: var(--t3);
+      padding: 16px 16px 4px;
+      display: block;
+    }
+
+    .sidebar-divider {
+      height: 1px;
+      background: rgba(0, 0, 0, 0.06);
+      margin: 10px 12px 10px;
+    }
+
+    /* SUBNAV (hidden — replaced by inline tabs) */
     #subnav {
+      display: none;
       position: fixed;
       top: 88px;
       left: calc(var(--sw) + 32px);
       bottom: 16px;
-      width: var(--nw);
+      width: 0;
       background: rgba(255, 255, 255, 0.25);
       backdrop-filter: blur(40px) saturate(180%);
       -webkit-backdrop-filter: blur(40px) saturate(180%);
@@ -521,12 +602,16 @@
     }
 
     #content {
-      margin-left: calc(var(--sw) + 40px);
-      margin-right: calc(var(--sw) + 40px);
+      margin-left: calc(var(--sw) + 28px);
+      margin-right: 32px;
       margin-top: 88px;
-      padding: 20px 0 80px;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 24px 0 80px;
+      transition: margin 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       animation: contentFade 0.4s ease-out;
+    }
+
+    .content-inner {
+      max-width: 1080px;
     }
 
     @keyframes contentFade {
@@ -541,35 +626,16 @@
       }
     }
 
-    #content.shifted {
-      margin-left: calc(var(--sw) + var(--nw) + 64px);
-    }
-
-    body.aside-minimized #content {
-      margin-right: 88px;
-    }
-
-    body.aside-minimized .welcome {
-      max-width: 1400px;
-    }
-
     body.present #sidebar {
       transform: translateX(calc(-100% - 40px));
     }
 
-    body.present #subnav {
-      transform: translateX(calc(-100% - 300px));
-    }
-
-
-
-    body.present #content,
-    body.present #content.shifted {
+    body.present #content {
       margin-left: auto;
       margin-right: auto;
       padding-left: 20px;
       padding-right: 20px;
-      max-width: 1100px;
+      max-width: 1160px;
     }
 
     /* PAGE HEADER */
@@ -1309,161 +1375,6 @@
       border-radius: 50%;
     }
 
-    /* ASIDE RIGHT (SMART UTILITIES) */
-    #aside-right {
-      position: fixed;
-      top: 16px;
-      right: 16px;
-      bottom: 16px;
-      width: var(--sw);
-      background: rgba(255, 255, 255, 0.06);
-      backdrop-filter: blur(25px) saturate(180%);
-      -webkit-backdrop-filter: blur(25px) saturate(180%);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 28px;
-      box-shadow: -8px 0 32px rgba(0, 0, 0, 0.05);
-      z-index: 300;
-      padding: 24px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      overflow-y: auto;
-      cursor: default;
-    }
-
-    #aside-right.minimized {
-      width: 48px;
-      padding: 24px 8px;
-      cursor: pointer;
-      overflow: hidden;
-    }
-
-    #aside-right.minimized > * {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    #aside-right.minimized::after {
-      content: '‹';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 20px;
-      color: var(--t2);
-      font-weight: 700;
-    }
-
-    #aside-right.minimized:hover {
-      background: rgba(255, 255, 255, 0.15);
-    }
-
-    #aside-right::-webkit-scrollbar {
-      width: 0;
-      display: none;
-    }
-
-    body.present #aside-right {
-      transform: translateX(calc(100% + 40px));
-      opacity: 0;
-    }
-
-    .util-sec {
-      margin-bottom: 4px;
-    }
-
-    .util-h {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--t3);
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .health-card {
-      background: rgba(0, 0, 0, 0.03);
-      border-radius: 18px;
-      padding: 16px;
-      border: 1px solid rgba(0, 0, 0, 0.05);
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .health-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .health-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--tanam);
-      box-shadow: 0 0 8px var(--tanam);
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.8); }
-      100% { opacity: 1; transform: scale(1); }
-    }
-
-    .health-info {
-      flex: 1;
-    }
-
-    .health-lbl {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--t1);
-    }
-
-    .health-val {
-      font-size: 11px;
-      color: var(--t2);
-      margin-top: 2px;
-    }
-
-    .notes-wrap {
-      background: rgba(255, 255, 255, 0.4);
-      border: 1px solid rgba(0, 0, 0, 0.05);
-      border-radius: 18px;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    #notes-area-aside {
-      width: 100%;
-      min-height: 240px;
-      background: transparent;
-      border: none;
-      outline: none;
-      font-family: inherit;
-      font-size: 13.5px;
-      line-height: 1.6;
-      color: var(--t1);
-      resize: none;
-    }
-
-    @media (max-width: 1560px) {
-      #aside-right {
-        transform: translateX(calc(100% + 40px));
-        opacity: 0;
-      }
-      #aside-right.open {
-        transform: translateX(0);
-        opacity: 1;
-      }
-    }
     
     /* --- PREMIUM GOA DASHBOARD STYLES --- */
     .goa-lock {
@@ -1584,21 +1495,6 @@
         </svg>
         <input type="text" id="sq" placeholder="Cari section..." oninput="doSearch(this.value)">
       </div>
-      <!-- Widget Panel Toggle -->
-      <div style="position:relative; display:flex; gap:12px;">
-        <button class="bt" id="btn-widget" onclick="toggleAsideRight()" title="Smart Utilities"
-          style="padding:8px 16px; display:flex; align-items:center; gap:8px;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-            <line x1="16" y1="2" x2="16" y2="6"></line>
-            <line x1="8" y1="2" x2="8" y2="6"></line>
-            <line x1="3" y1="10" x2="21" y2="10"></line>
-          </svg>
-          <span style="font-size:13px; font-weight:600;">Utilities</span>
-        </button>
-      </div>
-
       <button class="bt" id="btn-p" onclick="togglePresent()" style="padding:8px 16px; display:flex; align-items:center; gap:8px;">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
           stroke-linecap="round" stroke-linejoin="round">
@@ -1626,6 +1522,7 @@
         <span>Growth Ops Analytics Hub</span>
       </a>
     </div>
+    <span class="sidebar-section-label">Dokumentasi</span>
     <div class="bi br-allbrand" id="b-allbrand">
       <button class="bb" onclick="toggleBrand('allbrand',this)"><span style="color:var(--allbrand)"><span
             style="display:inline-flex; align-items:center; justify-content:center; width:36px; height:24px;"><svg
@@ -1682,6 +1579,8 @@
         <button class="tb" onclick="selTeam('vinir','Retention',this)">Retention</button>
       </div>
     </div>
+    <div class="sidebar-divider"></div>
+    <span class="sidebar-section-label">Management</span>
     <div class="bi br-goa" id="b-goa">
       <button class="bb" onclick="toggleBrand('goa',this)"><span style="color:var(--goa)"><span
             style="display:inline-flex; align-items:center; justify-content:center; width:36px; height:24px;">🔮</span>
@@ -1797,35 +1696,6 @@
     </div><!-- /home-layout -->
   </main>
 
-  <!-- SMART UTILITIES (RIGHT SIDEBAR) -->
-  <aside id="aside-right">
-    <!-- Calendar -->
-    <div class="util-sec">
-      <div class="util-h">
-        <span>Kalender</span>
-        <div style="display:flex;gap:4px;">
-          <button onclick="calNav(-1)" style="background:rgba(0,0,0,0.05);border:none;border-radius:6px;width:24px;height:24px;cursor:pointer;font-size:12px;">‹</button>
-          <button onclick="calNav(1)" style="background:rgba(0,0,0,0.05);border:none;border-radius:6px;width:24px;height:24px;cursor:pointer;font-size:12px;">›</button>
-        </div>
-      </div>
-      <div id="cal-aside"></div>
-    </div>
-
-    <!-- Quick Notes -->
-    <div class="util-sec" style="flex:1; display:flex; flex-direction:column;">
-      <div class="util-h">
-        <span>Quick Notes</span>
-        <button onclick="clearNotes()" style="font-size:10px; color:var(--t3); background:none; border:none; cursor:pointer;">Hapus</button>
-      </div>
-      <div class="notes-wrap">
-        <textarea id="notes-area-aside" placeholder="Ketik sesuatu..."></textarea>
-        <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:10px;color:var(--t3);">
-          <span id="notes-saved-aside">—</span>
-          <span id="notes-chars-aside">0 char</span>
-        </div>
-      </div>
-    </div>
-  </aside>
 
   <script src="libs/jquery.min.js"></script>
   <script src="libs/datatables.min.js"></script>
@@ -1842,119 +1712,6 @@
   <script>
     mermaid.initialize({ startOnLoad: false, theme: 'neutral', securityLevel: 'loose', fontFamily: 'Inter' });
 
-    // ── WIDGET PANEL TOGGLE ────────────────────────────────────────
-    window.toggleAsideRight = function () {
-      const panel = document.getElementById('aside-right');
-      const btn = document.getElementById('btn-widget');
-      panel.classList.remove('minimized');
-      document.body.classList.remove('aside-minimized');
-      const open = panel.classList.toggle('open');
-      btn.classList.toggle('on', open);
-      if (open) {
-        if (!document.querySelector('#cal-aside .cal-grid')) renderCal();
-      }
-    };
-
-    // Auto-minimize logic
-    document.getElementById('aside-right').addEventListener('click', function() {
-      if (this.classList.contains('minimized')) {
-        this.classList.remove('minimized');
-        document.body.classList.remove('aside-minimized');
-      }
-    });
-    function closePanelOutside(e) {
-      const panel = document.getElementById('aside-right');
-      const btn = document.getElementById('btn-widget');
-      if (window.innerWidth <= 1560 && !panel.contains(e.target) && !btn.contains(e.target)) {
-        panel.classList.remove('open');
-        btn.classList.remove('on');
-      }
-    }
-    document.addEventListener('click', closePanelOutside);
-
-    // ── QUICK NOTES ────────────────────────────────────────────────
-    (function () {
-      const LS_KEY = 'goh_quick_notes';
-      const ta = document.getElementById('notes-area-aside');
-      const savedEl = document.getElementById('notes-saved-aside');
-      const charsEl = document.getElementById('notes-chars-aside');
-      if (!ta) return;
-
-      // load saved
-      ta.value = localStorage.getItem(LS_KEY) || '';
-      updateMeta();
-
-      let saveTimer;
-      ta.addEventListener('input', function () {
-        clearTimeout(saveTimer);
-        savedEl.textContent = 'Saving…';
-        updateMeta();
-        saveTimer = setTimeout(function () {
-          localStorage.setItem(LS_KEY, ta.value);
-          const now = new Date();
-          savedEl.textContent = 'Saved ' + now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-        }, 600);
-      });
-
-      function updateMeta() {
-        charsEl.textContent = ta.value.length + ' char';
-      }
-
-      window.clearNotes = function () {
-        if (!ta.value || confirm('Hapus semua catatan?')) {
-          ta.value = '';
-          localStorage.removeItem(LS_KEY);
-          savedEl.textContent = 'Dihapus';
-          updateMeta();
-        }
-      };
-    })();
-
-    // ── MINI CALENDAR ──────────────────────────────────────────────
-    (function () {
-      const DAYS = ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
-      const MONTHS = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-      const now = new Date();
-      let viewY = now.getFullYear(), viewM = now.getMonth();
-
-      function renderCal() {
-        const el = document.getElementById('cal-aside');
-        if (!el) return;
-        const first = new Date(viewY, viewM, 1).getDay();
-        const days = new Date(viewY, viewM + 1, 0).getDate();
-        const prevDays = new Date(viewY, viewM, 0).getDate();
-        const todayStr = now.getFullYear() + '-' + now.getMonth() + '-' + now.getDate();
-        let html = '<div class="cal-head">' + MONTHS[viewM] + ' ' + viewY + '</div>';
-        html += '<div class="cal-grid">';
-        DAYS.forEach(d => { html += '<div class="cal-dow">' + d + '</div>'; });
-        // leading blanks from prev month
-        for (let i = 0; i < first; i++) {
-          html += '<div class="cal-day other">' + (prevDays - first + 1 + i) + '</div>';
-        }
-        for (let d = 1; d <= days; d++) {
-          const isToday = (viewY + '-' + viewM + '-' + d) === todayStr;
-          html += '<div class="cal-day' + (isToday ? ' today' : '') + '">' + d + '</div>';
-        }
-        // trailing
-        const total = first + days;
-        const trail = total % 7 === 0 ? 0 : 7 - (total % 7);
-        for (let i = 1; i <= trail; i++) {
-          html += '<div class="cal-day other">' + i + '</div>';
-        }
-        html += '</div>';
-        el.innerHTML = html;
-      }
-
-      window.calNav = function (dir) {
-        viewM += dir;
-        if (viewM < 0) { viewM = 11; viewY--; }
-        if (viewM > 11) { viewM = 0; viewY++; }
-        renderCal();
-      };
-
-      window.renderCal = renderCal;
-    })();
 
     const COLORS = { rata: '#dc2626', tanam: '#15803d', vinir: '#2563eb', allbrand: '#475569', goa: '#a855f7' };
     const ACBG = {
@@ -1986,31 +1743,32 @@
 
     function selTeam(brand, team, btn) {
       cBrand = brand; cTeam = team; cSec = null; cSub = null;
-      const sn = document.getElementById('subnav');
-      sn.style.setProperty('--act', COLORS[brand]);
-      sn.style.setProperty('--acbg', ACBG[brand]);
-      // propagate brand color to :root so var(--act) resolves in #content cards
       document.documentElement.style.setProperty('--act', COLORS[brand]);
+      document.documentElement.style.setProperty('--acbg', ACBG[brand]);
       document.querySelectorAll('.tb').forEach(b => b.classList.remove('on'));
       if (btn) btn.classList.add('on');
-      sn.classList.add('on');
-      document.body.classList.add('shifted');
-      document.getElementById('content').classList.add('shifted');
-      document.getElementById('snh').textContent = brand.toUpperCase() + ' · ' + team;
       buildSubnav(brand, team);
-    }
-
-    function toggleSub(id, btn) {
-      document.getElementById(id).classList.toggle('open');
-      btn.classList.toggle('open');
     }
 
     function pick(btn, sec, sub) {
       cSec = sec; cSub = sub;
-      document.querySelectorAll('.snb,.ssb').forEach(b => b.classList.remove('on'));
-      btn.classList.add('on');
-      document.getElementById('aside-right').classList.add('minimized');
-      document.body.classList.add('aside-minimized');
+      updateBC(); renderSection();
+    }
+
+    function pickTab(sec, btn) {
+      const teamData = DATA[cBrand]?.[cTeam];
+      cSec = sec;
+      const secData = teamData?.[sec];
+      if (secData && typeof secData === 'object' && !Array.isArray(secData.blocks) && secData.blocks === undefined) {
+        cSub = Object.keys(secData)[0] || null;
+      } else {
+        cSub = null;
+      }
+      updateBC(); renderSection();
+    }
+
+    function pickSub(sub) {
+      cSub = sub;
       updateBC(); renderSection();
     }
 
@@ -2026,17 +1784,10 @@
 
     function selAllBrand(section, btn) {
       cBrand = 'allbrand'; cTeam = section; cSec = null; cSub = null;
-      const sn = document.getElementById('subnav');
-      sn.style.setProperty('--act', COLORS.allbrand);
-      sn.style.setProperty('--acbg', ACBG.allbrand);
       document.documentElement.style.setProperty('--act', COLORS.allbrand);
+      document.documentElement.style.setProperty('--acbg', ACBG.allbrand);
       document.querySelectorAll('.tb').forEach(b => b.classList.remove('on'));
       btn.classList.add('on');
-      sn.classList.remove('on');
-      document.body.classList.remove('shifted');
-      document.getElementById('content').classList.remove('shifted');
-      document.getElementById('aside-right').classList.add('minimized');
-      document.body.classList.add('aside-minimized');
       updateBC(); renderSection();
     }
 
@@ -2049,63 +1800,60 @@
 
     function doSearch(q) {
       const v = q.toLowerCase().trim();
-      document.querySelectorAll('#subnav .ssb').forEach(b =>
-        b.classList.toggle('hidden', v && !b.textContent.toLowerCase().includes(v)));
-      document.querySelectorAll('#subnav .sg').forEach(g => {
-        if (!v) { g.style.display = ''; return; }
-        const vis = [...g.querySelectorAll('.ssb')].some(b => !b.classList.contains('hidden'));
-        const hd = g.querySelector('.snb')?.textContent.toLowerCase().includes(v);
-        g.style.display = (vis || hd) ? '' : 'none';
-        if (vis) g.classList.add('open');
-      });
+      if (!v) {
+        document.querySelectorAll('.snav-tab, .snav-sub-btn').forEach(b => b.style.display = '');
+        return;
+      }
+      document.querySelectorAll('.snav-tab').forEach(b =>
+        b.style.display = b.textContent.toLowerCase().includes(v) ? '' : 'none');
+      document.querySelectorAll('.snav-sub-btn').forEach(b =>
+        b.style.display = b.textContent.toLowerCase().includes(v) ? '' : 'none');
     }
 
     // ── RENDER ─────────────────────────────────────────────────────────────
     function renderSection() {
       if (cBrand === 'goa') {
-        if (cTeam === 'Trace Progress') {
-          renderGoaTrace();
-          return;
-        }
-        if (cTeam === 'Panduan Manager') {
-          renderGoaManager();
-          return;
-        }
+        if (cTeam === 'Trace Progress') { renderGoaTrace(); return; }
+        if (cTeam === 'Panduan Manager') { renderGoaManager(); return; }
       }
-      
-      let col, data, label, bc, key;
-      if (cBrand === 'allbrand') {
-        col = COLORS.allbrand;
-        data = DATA.allbrand?.[cTeam];
-        if (cTeam === 'Dashboard Growth') {
-          data = { blocks: DASHBOARD_BLOCKS };
-        }
-        label = cTeam || '';
-        bc = 'ALL BRAND / ' + (cTeam || '');
-        key = `allbrand["${cTeam}"]`;
-      } else {
-        col = COLORS[cBrand];
-        data = cSub
-          ? DATA[cBrand]?.[cTeam]?.[cSec]?.[cSub]
-          : DATA[cBrand]?.[cTeam]?.[cSec];
-        label = cSub || cSec;
-        bc = [cBrand.toUpperCase(), cTeam, cSec, cSub].filter(Boolean).join(' / ');
-        key = cSub ? `${cBrand}.${cTeam}["${cSec}"]["${cSub}"]` : `${cBrand}.${cTeam}["${cSec}"]`;
-      }
+
       const main = document.getElementById('content');
 
-      if (!data?.blocks?.length) {
-        main.innerHTML = `
-      <div class="phead"><div class="phead-bc" style="color:${col}">${bc}</div><h1>${label}</h1></div>
-      <div class="empty">
-        <div class="empty-icon">📝</div>
-        <div class="empty-title">Belum ada konten</div>
-        <div class="empty-hint">Tambahkan di <code>data.js</code> → <code>${key}.blocks</code></div>
-      </div>`;
+      // ── allbrand: no tab nav needed
+      if (cBrand === 'allbrand') {
+        const col = COLORS.allbrand;
+        let data = DATA.allbrand?.[cTeam];
+        if (cTeam === 'Dashboard Growth') data = { blocks: DASHBOARD_BLOCKS };
+        const label = cTeam || '';
+        const bc = 'ALL BRAND · ' + label;
+        if (!data?.blocks?.length) {
+          main.innerHTML = `<div class="content-inner"><div class="phead"><div class="phead-bc" style="color:${col}">${bc}</div><h1>${label}</h1></div><div class="empty"><div class="empty-icon">📝</div><div class="empty-title">Belum ada konten</div><div class="empty-hint">Tambahkan di <code>data.js</code> → <code>allbrand["${label}"].blocks</code></div></div></div>`;
+          return;
+        }
+        main.innerHTML = `<div class="content-inner"><div class="phead"><div class="phead-bc" style="color:${col}">${bc}</div><h1>${label}</h1></div><div id="blocks"></div></div>`;
+        renderBlocks(data.blocks, document.getElementById('blocks'), col);
         return;
       }
 
-      main.innerHTML = `<div class="phead"><div class="phead-bc" style="color:${col}">${bc}</div><h1>${label}</h1></div><div id="blocks"></div>`;
+      // ── brand + team: inline tab nav
+      const col = COLORS[cBrand];
+      const teamData = DATA[cBrand]?.[cTeam];
+      const data = cSub
+        ? teamData?.[cSec]?.[cSub]
+        : teamData?.[cSec];
+      const label = cSub || cSec || '';
+      const bc = [cBrand.toUpperCase(), cTeam, cSec, cSub].filter(Boolean).join(' · ');
+      const key = cSub ? `${cBrand}.${cTeam}["${cSec}"]["${cSub}"]` : `${cBrand}.${cTeam}["${cSec}"]`;
+
+      const tabsHtml = buildInlineTabs(teamData);
+      const subHtml = buildInlineSubTabs(teamData?.[cSec]);
+
+      if (!data?.blocks?.length) {
+        main.innerHTML = `<div class="content-inner"><div class="phead"><div class="phead-bc" style="color:${col}">${bc}</div><h1>${label}</h1></div><div class="snav-inline">${tabsHtml}</div>${subHtml}<div class="empty"><div class="empty-icon">📝</div><div class="empty-title">Belum ada konten</div><div class="empty-hint">Tambahkan di <code>data.js</code> → <code>${key}.blocks</code></div></div></div>`;
+        return;
+      }
+
+      main.innerHTML = `<div class="content-inner"><div class="phead"><div class="phead-bc" style="color:${col}">${bc}</div><h1>${label}</h1></div><div class="snav-inline">${tabsHtml}</div>${subHtml}<div id="blocks"></div></div>`;
       renderBlocks(data.blocks, document.getElementById('blocks'), col);
     }
 
@@ -2248,74 +1996,39 @@
 
     function buildSubnav(brand, team) {
       const teamData = DATA[brand]?.[team];
-      const body = document.getElementById('subnav-body');
-      body.innerHTML = '';
       if (!teamData) return;
 
-      let firstPick = null;
+      const tabs = Object.keys(teamData);
+      if (!tabs.length) return;
 
-      Object.entries(teamData).forEach(([groupKey, groupVal]) => {
-        if (!groupVal || typeof groupVal !== 'object') return;
-
-        const isFlat = groupVal.blocks !== undefined;
-
-        if (isFlat) {
-          const div = document.createElement('div');
-          div.className = 'sg';
-          const btn = document.createElement('button');
-          btn.className = 'snb';
-          btn.textContent = groupKey;
-          btn.addEventListener('click', () => pick(btn, groupKey, null));
-          div.appendChild(btn);
-          body.appendChild(div);
-          const sdiv = document.createElement('div'); sdiv.className = 'sdiv';
-          body.appendChild(sdiv);
-          if (!firstPick) firstPick = { btn, sec: groupKey, sub: null };
-
-        } else {
-          const subEntries = Object.entries(groupVal);
-          if (!subEntries.length) return;
-
-          const sgId = 'sgd-' + groupKey.replace(/[^a-zA-Z0-9]/g, '');
-          const div = document.createElement('div');
-          div.className = 'sg';
-          div.id = sgId;
-
-          const groupBtn = document.createElement('button');
-          groupBtn.className = 'snb';
-          groupBtn.innerHTML = escHtml(groupKey) + ' <span class="arr">▶</span>';
-          groupBtn.addEventListener('click', () => toggleSub(sgId, groupBtn));
-          div.appendChild(groupBtn);
-
-          const ss = document.createElement('div');
-          ss.className = 'ss';
-          subEntries.forEach(([subKey]) => {
-            const ssBtn = document.createElement('button');
-            ssBtn.className = 'ssb';
-            ssBtn.textContent = subKey;
-            ssBtn.addEventListener('click', () => pick(ssBtn, groupKey, subKey));
-            ss.appendChild(ssBtn);
-            if (!firstPick) {
-              firstPick = { btn: ssBtn, sec: groupKey, sub: subKey, groupEl: div, groupBtn };
-            }
-          });
-          div.appendChild(ss);
-          body.appendChild(div);
-          const sdiv = document.createElement('div'); sdiv.className = 'sdiv';
-          body.appendChild(sdiv);
-        }
-      });
-
-      if (firstPick) {
-        if (firstPick.groupEl) {
-          firstPick.groupEl.classList.add('open');
-          firstPick.groupBtn.classList.add('open');
-        }
-        cSec = firstPick.sec; cSub = firstPick.sub;
-        firstPick.btn.classList.add('on');
-        updateBC();
-        renderSection();
+      // auto-select first section
+      cSec = tabs[0];
+      const firstVal = teamData[cSec];
+      if (firstVal && typeof firstVal === 'object' && firstVal.blocks === undefined && !Array.isArray(firstVal)) {
+        cSub = Object.keys(firstVal)[0] || null;
+      } else {
+        cSub = null;
       }
+
+      updateBC();
+      renderSection();
+    }
+
+    function buildInlineTabs(teamData) {
+      if (!teamData) return '';
+      const tabs = Object.keys(teamData);
+      return tabs.map(tab =>
+        `<button class="snav-tab${tab === cSec ? ' on' : ''}" onclick="pickTab(${JSON.stringify(tab)}, this)">${escHtml(tab)}</button>`
+      ).join('');
+    }
+
+    function buildInlineSubTabs(sectionData) {
+      if (!sectionData || typeof sectionData !== 'object' || sectionData.blocks !== undefined || Array.isArray(sectionData)) return '';
+      const subs = Object.keys(sectionData);
+      if (!subs.length) return '';
+      return `<div class="snav-sub">${subs.map(sub =>
+        `<button class="snav-sub-btn${sub === cSub ? ' on' : ''}" onclick="pickSub(${JSON.stringify(sub)})">${escHtml(sub)}</button>`
+      ).join('')}</div>`;
     }
 
     // ── AI SEARCH BOT LOGIC ───────────────────────────────────────
@@ -2427,8 +2140,6 @@
         const h = document.getElementById(mId);
         if (h) h.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
-      document.getElementById('aside-right').classList.add('minimized');
-      
       setTimeout(() => {
         // keyword prep — strip stop words, keep len >= 2
         // ── detect brand / team filter in query ──
@@ -2567,8 +2278,6 @@
       if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); window.askAI(); }
     });
 
-    // Initial render for Smart Utilities
-    if (window.renderCal) window.renderCal();
 
   </script>
 
@@ -2600,7 +2309,7 @@
       const main = document.getElementById('content');
       if (auth !== '1') {
         main.innerHTML = `
-          <div class="phead"><div class="phead-bc" style="color:var(--goa)">MANAGEMENT GOA / Panduan Manager</div><h1>Confidential Area</h1></div>
+          <div class="content-inner"><div class="phead"><div class="phead-bc" style="color:var(--goa)">MANAGEMENT GOA · Panduan Manager</div><h1>Confidential Area</h1></div>
           <div class="goa-lock" id="goa-lock-box">
             <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="url(#goa-grad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:24px; filter: drop-shadow(0 8px 16px rgba(168, 85, 247, 0.4));">
               <defs><linearGradient id="goa-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#a855f7"/><stop offset="100%" stop-color="#7e22ce"/></linearGradient></defs>
@@ -2610,6 +2319,7 @@
             <div style="color:var(--t2); margin-bottom:32px; text-align:center; max-width:320px; line-height:1.5;">Dokumen ini berisi pegangan operasional manager dan visibility VP. Masukkan password untuk melanjutkan.</div>
             <input type="password" id="goa-pwd" class="goa-input" placeholder="Enter Password" onkeydown="if(event.key==='Enter') checkManagerAuth()">
             <button class="goa-btn" onclick="checkManagerAuth()">Buka Akses</button>
+          </div>
           </div>
         `;
         setTimeout(() => document.getElementById('goa-pwd').focus(), 100);
@@ -2622,7 +2332,7 @@
       for (const key in managerData) {
         allBlocks = allBlocks.concat(managerData[key].blocks);
       }
-      main.innerHTML = `<div class="phead"><div class="phead-bc" style="color:var(--goa)">MANAGEMENT GOA / Panduan Manager</div><h1>Panduan Manager (Confidential)</h1></div><div id="blocks"></div>`;
+      main.innerHTML = `<div class="content-inner"><div class="phead"><div class="phead-bc" style="color:var(--goa)">MANAGEMENT GOA · Panduan Manager</div><h1>Panduan Manager (Confidential)</h1></div><div id="blocks"></div></div>`;
       renderBlocks(allBlocks, document.getElementById('blocks'), COLORS.goa);
     }
     
@@ -2648,7 +2358,7 @@
     function renderGoaTrace() {
       const main = document.getElementById('content');
       let html = `
-        <div class="phead"><div class="phead-bc" style="color:var(--goa)">MANAGEMENT GOA / Trace Progress</div><h1>Trace Progress Dashboard</h1></div>
+        <div class="content-inner"><div class="phead"><div class="phead-bc" style="color:var(--goa)">MANAGEMENT GOA · Trace Progress</div><h1>Trace Progress Dashboard</h1></div>
         
         <div style="background:white; border-radius:16px; padding:24px; box-shadow:var(--shadow-sm); border:1px solid var(--bor); margin-bottom:32px;">
           <div class="goa-tabs">
@@ -2699,6 +2409,7 @@
               <div class="step" style="--act:var(--goa)"><div class="step-body"><div class="step-title">🎯 R: Review 60 Hari (Minggu 8)</div><div class="step-desc">Peninjauan menyeluruh kinerja tim untuk rekomendasi ke VP.</div><span class="step-note" style="color:var(--goa);background:rgba(168,85,247,0.1)">PIC: Manager</span></div></div>
             </div>
           </div>
+        </div>
         </div>
       `;
       main.innerHTML = html;
