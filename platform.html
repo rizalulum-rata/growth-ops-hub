@@ -3285,26 +3285,46 @@
         var placeholder = 'CHARTBLOCK' + (idx++) + 'END';
         var chartId = 'ai-chart-' + Date.now() + '-' + Math.random().toString(36).slice(2,5);
 
-        var scriptMatch = blockContent.match(/<script[^>]*>([\s\S]*?)<\/script>/i);
-        var divOnly = blockContent.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '').trim();
+        // Pecah block jika ada beberapa div+script (multi-chart dalam satu block)
+        var scripts = [];
+        var sc;
+        var tempBlock = blockContent.replace(/<script[^>]*>([\s\S]*?)<\/script>/gi, function(_, s) {
+          scripts.push(s); return '';
+        });
+        var divMatches = tempBlock.match(/<div[^>]*id=["'][^'"]+["'][^>]*style=["'][^'"]*height[^'"]*["'][^>]*><\/div>/gi) || [];
 
-        var origIdMatch = divOnly.match(/id=["']([^'"]+)['"]/);
-        var origId = origIdMatch ? origIdMatch[1] : 'mychart';
-        divOnly = divOnly.replace(new RegExp('id=["\']' + origId + '["\']', 'g'), 'id="' + chartId + '"');
+        // Fallback: ambil semua div yang punya id
+        if (divMatches.length === 0) {
+          divMatches = tempBlock.match(/<div[^>]+id=["'][^'"]+["'][^>]*><\/div>/gi) || [tempBlock.trim()];
+        }
 
-        if (scriptMatch) {
-          var sc = scriptMatch[1]
-            .replace(new RegExp("(['\"])" + origId + "\\1", 'g'), '"' + chartId + '"')
-            .replace(/document\.getElementById\(['"][^'"]*['"]\)/g, 'document.getElementById("' + chartId + '")');
-          sc = sc.replace(/\.setOption\s*\(\s*\{/, '.setOption({backgroundColor:"transparent",textStyle:{color:"#94a3b8"},');
-          window._pendingChartScripts[chartId] = '(function(){\n' + sc + '\n})();';
+        var combinedHtml = '';
+        var combinedSpans = '';
+        var count = Math.max(divMatches.length, scripts.length, 1);
+
+        for (var i = 0; i < count; i++) {
+          var cid = 'ai-chart-' + Date.now() + '-' + Math.random().toString(36).slice(2,6);
+          var divHtml = divMatches[i] || '<div id="' + cid + '" style="height:250px;width:100%;"></div>';
+          var origIdM = divHtml.match(/id=["']([^'"]+)['"]/);
+          var origId = origIdM ? origIdM[1] : 'mychart';
+          divHtml = divHtml.replace(new RegExp('id=["\']' + origId + '["\']'), 'id="' + cid + '"');
+
+          if (scripts[i]) {
+            var sCode = scripts[i]
+              .replace(new RegExp("(['\"])" + origId + "\\1", 'g'), '"' + cid + '"')
+              .replace(/document\.getElementById\(['"][^'"]*['"]\)/g, 'document.getElementById("' + cid + '")');
+            sCode = sCode.replace(/\.setOption\s*\(\s*\{/, '.setOption({backgroundColor:"transparent",textStyle:{color:"#94a3b8"},');
+            window._pendingChartScripts[cid] = '(function(){\n' + sCode + '\n})();';
+          }
+
+          combinedHtml += '<div style="padding:8px 4px;">' + divHtml + '</div>';
+          combinedSpans += '<span data-chart-id="' + cid + '" style="display:none;"></span>';
         }
 
         chartBlocks[placeholder] =
           '<div style="background:var(--b2);border:1px solid var(--sep);border-radius:10px;overflow:hidden;margin:8px 0;">' +
           '<div style="font-size:10px;color:var(--t3);padding:6px 12px;border-bottom:1px solid var(--sep);">📊 Chart — dari AI</div>' +
-          '<div style="padding:8px 4px;">' + divOnly + '</div>' +
-          '</div><span data-chart-id="' + chartId + '" style="display:none;"></span>';
+          combinedHtml + '</div>' + combinedSpans;
 
         return placeholder;
       });
