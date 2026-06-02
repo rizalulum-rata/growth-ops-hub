@@ -3489,26 +3489,14 @@
       }, 50);
     };
 
-    // Split key — separuh di kode, separuh dari user input
-    const _KP = 'sk-c6eab6a625c040f7';
+    // Ambil API key dari localStorage, minta input jika belum ada
     function _getApiKey() {
       var k = localStorage.getItem('goh_dskey');
       if (!k) {
-        k = prompt('Masukkan kode akses AI:\n(16 karakter, tanpa spasi)');
-        if (k && k.trim()) {
-          localStorage.setItem('goh_dskey', k.trim());
-        } else {
-          return null;
-        }
+        k = prompt('Masukkan DeepSeek API Key untuk mengaktifkan AI Assistant:\n(Akan disimpan di browser ini)');
+        if (k && k.trim()) localStorage.setItem('goh_dskey', k.trim());
       }
-      var full = _KP + k.trim();
-      // Validasi panjang — kalau salah, hapus dan minta ulang
-      if (full.length !== 34) {
-        localStorage.removeItem('goh_dskey');
-        alert('Kode akses tidak valid (' + k.trim().length + ' karakter). Harus 16 karakter.');
-        return null;
-      }
-      return full;
+      return k ? k.trim() : null;
     }
 
     window.askAI = async function () {
