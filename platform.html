@@ -3306,6 +3306,22 @@
     };
 
     window._mdToHtml = function(txt) {
+      // Parse markdown tables dulu sebelum replace lainnya
+      txt = txt.replace(/(\|[^\n]+\|\n)((?:\|[-:| ]+\|\n))(\|[^\n]+\|\n?)+/g, function(match) {
+        var lines = match.trim().split('\n').filter(function(l){ return l.trim(); });
+        // Baris 0 = header, baris 1 = separator (---), baris 2+ = data
+        var headers = lines[0].split('|').map(function(c){ return c.trim(); }).filter(Boolean);
+        var rows = lines.slice(2).map(function(line){
+          return line.split('|').map(function(c){ return c.trim(); }).filter(Boolean);
+        });
+        var th = headers.map(function(h){ return '<th style="padding:6px 10px;background:var(--b3);font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--t3);text-align:left;border-bottom:2px solid var(--sep);">' + h + '</th>'; }).join('');
+        var trs = rows.map(function(r){
+          var tds = r.map(function(c){ return '<td style="padding:6px 10px;font-size:12px;color:var(--t2);border-bottom:1px solid var(--sep);">' + c + '</td>'; }).join('');
+          return '<tr>' + tds + '</tr>';
+        }).join('');
+        return '<div style="overflow-x:auto;margin:8px 0;border:1px solid var(--sep);border-radius:8px;"><table style="width:100%;border-collapse:collapse;"><thead><tr>' + th + '</tr></thead><tbody>' + trs + '</tbody></table></div>';
+      });
+
       return txt
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
         .replace(/\*(.*?)\*/g, '<em>$1</em>')
