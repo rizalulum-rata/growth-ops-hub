@@ -3282,7 +3282,7 @@
       // 1. Ekstrak semua ```html block, ganti dengan placeholder ##CHART_X##
       var idx = 0;
       var withPlaceholders = raw.replace(/```html\s*([\s\S]*?)```/gi, function(_, blockContent) {
-        var placeholder = '##CHART_' + (idx++) + '##';
+        var placeholder = 'CHARTBLOCK' + (idx++) + 'END';
         var chartId = 'ai-chart-' + Date.now() + '-' + Math.random().toString(36).slice(2,5);
 
         var scriptMatch = blockContent.match(/<script[^>]*>([\s\S]*?)<\/script>/i);
@@ -3314,7 +3314,7 @@
 
       // 3. Kembalikan chart blocks (placeholder tidak akan diubah _mdToHtml)
       Object.keys(chartBlocks).forEach(function(p) {
-        html = html.replace(new RegExp(p.replace(/##/g,'\\#\\#'), 'g'), chartBlocks[p]);
+        html = html.split(p).join(chartBlocks[p]);
       });
 
       return html;
