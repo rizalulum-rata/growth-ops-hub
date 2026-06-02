@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -2477,131 +2477,235 @@
         <svg class="welcome-botanical" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
 
 
-          <!-- NEURON: soma at theme toggle (1826,28), dendrites grow organically -->
-          <!-- bezier Q curves = real dendritic morphology, no geometric rings -->
+          <!-- ===== ORIGIN: theme toggle button (~1826, 28) ===== -->
+          <!-- 7 arms radiate outward from topbar center-right = full-screen web -->
 
-          <!-- G0→G1: 5 primary dendrites burst from soma at theme toggle -->
-          <path class="nn-edge" d="M 1826,28 Q 1722,55 1640,68"     style="--delay:0.33s"/>
-          <path class="nn-edge" d="M 1826,28 Q 1792,132 1750,215"   style="--delay:0.34s"/>
-          <path class="nn-edge" d="M 1826,28 Q 1868,122 1875,235"   style="--delay:0.32s"/>
-          <path class="nn-edge" d="M 1826,28 Q 1672,20  1530,52"    style="--delay:0.33s"/>
-          <path class="nn-edge" d="M 1826,28 Q 1788,198 1720,355"   style="--delay:0.36s"/>
-          <!-- G1→G2 -->
-          <path class="nn-edge" d="M 1530,52  Q 1456,32  1390,55"   style="--delay:0.58s"/>
-          <path class="nn-edge" d="M 1640,68  Q 1546,108 1460,185"  style="--delay:0.61s"/>
-          <path class="nn-edge" d="M 1750,215 Q 1648,292 1550,345"  style="--delay:0.66s"/>
-          <path class="nn-edge" d="M 1875,235 Q 1893,348 1875,460"  style="--delay:0.64s"/>
-          <path class="nn-edge" d="M 1720,355 Q 1718,460 1695,570"  style="--delay:0.86s"/>
-          <!-- G2→G3 -->
-          <path class="nn-edge" d="M 1390,55  Q 1278,42  1170,72"   style="--delay:0.78s"/>
-          <path class="nn-edge" d="M 1460,185 Q 1334,172 1210,215"  style="--delay:0.82s"/>
-          <path class="nn-edge" d="M 1550,345 Q 1468,428 1400,490"  style="--delay:0.86s"/>
-          <path class="nn-edge" d="M 1695,570 Q 1612,652 1540,730"  style="--delay:1.08s"/>
-          <!-- G3→G4 -->
-          <path class="nn-edge" d="M 1170,72  Q 1032,68  900,105"   style="--delay:1.04s"/>
-          <path class="nn-edge" d="M 1210,215 Q 1120,222 1040,250"  style="--delay:1.06s"/>
-          <path class="nn-edge" d="M 1400,490 Q 1338,562 1290,630"  style="--delay:1.08s"/>
-          <path class="nn-edge" d="M 1540,730 Q 1468,832 1410,920"  style="--delay:1.30s"/>
-          <!-- G4→G5 -->
-          <path class="nn-edge" d="M 900,105  Q 762,110 630,148"    style="--delay:1.28s"/>
-          <path class="nn-edge" d="M 1040,250 Q 918,272 800,330"    style="--delay:1.28s"/>
-          <path class="nn-edge" d="M 1290,630 Q 1212,718 1150,790"  style="--delay:1.30s"/>
-          <path class="nn-edge" d="M 1410,920 Q 1328,1002 1260,1060" style="--delay:1.50s"/>
-          <!-- G5→G6 -->
-          <path class="nn-edge" d="M 630,148  Q 494,162 360,210"    style="--delay:1.52s"/>
-          <path class="nn-edge" d="M 800,330  Q 664,368 530,430"    style="--delay:1.50s"/>
-          <path class="nn-edge" d="M 1150,790 Q 1058,878 980,960"   style="--delay:1.52s"/>
-          <!-- G6→G7 terminal reaches screen edges -->
-          <path class="nn-edge" d="M 360,210  Q 234,285 120,380"    style="--delay:1.78s"/>
-          <path class="nn-edge" d="M 530,430  Q 402,508 290,580"    style="--delay:1.76s"/>
-          <path class="nn-edge" d="M 980,960  Q 878,1018 780,1060"  style="--delay:1.76s"/>
-          <!-- Terminal axon boutons -->
-          <path class="nn-edge" d="M 120,380  Q 82,442 60,500"      style="--delay:2.02s"/>
-          <path class="nn-edge" d="M 290,580  Q 162,628 60,680"     style="--delay:2.00s"/>
-          <path class="nn-edge" d="M 1260,1060 Q 1178,1072 1100,1060" style="--delay:1.72s"/>
-          <!-- Synaptic cross-connections: neurons connect non-hierarchically -->
-          <path class="nn-edge" d="M 1210,215 Q 1288,342 1400,490"  style="--delay:1.06s"/>
-          <path class="nn-edge" d="M 1040,250 Q 1152,428 1290,630"  style="--delay:1.28s"/>
-          <path class="nn-edge" d="M 900,105  Q 968,178 1040,250"   style="--delay:1.28s"/>
-          <!-- NODE RIPPLES (activation waves, larger on soma) -->
-          <circle class="nn-ring" cx="1826" cy="28"   r="7" style="--delay:0.10s"/>
-          <circle class="nn-ring" cx="1640" cy="68"   r="5" style="--delay:0.35s"/>
-          <circle class="nn-ring" cx="1750" cy="215"  r="5" style="--delay:0.36s"/>
-          <circle class="nn-ring" cx="1875" cy="235"  r="5" style="--delay:0.34s"/>
-          <circle class="nn-ring" cx="1530" cy="52"   r="5" style="--delay:0.35s"/>
-          <circle class="nn-ring" cx="1720" cy="355"  r="5" style="--delay:0.38s"/>
-          <circle class="nn-ring" cx="1390" cy="55"   r="5" style="--delay:0.60s"/>
-          <circle class="nn-ring" cx="1460" cy="185"  r="5" style="--delay:0.63s"/>
-          <circle class="nn-ring" cx="1550" cy="345"  r="5" style="--delay:0.68s"/>
-          <circle class="nn-ring" cx="1875" cy="460"  r="5" style="--delay:0.66s"/>
-          <circle class="nn-ring" cx="1695" cy="570"  r="5" style="--delay:0.88s"/>
-          <circle class="nn-ring" cx="1170" cy="72"   r="5" style="--delay:0.80s"/>
-          <circle class="nn-ring" cx="1210" cy="215"  r="5" style="--delay:0.84s"/>
-          <circle class="nn-ring" cx="1400" cy="490"  r="5" style="--delay:0.88s"/>
-          <circle class="nn-ring" cx="1540" cy="730"  r="5" style="--delay:1.10s"/>
-          <circle class="nn-ring" cx="900"  cy="105"  r="5" style="--delay:1.06s"/>
-          <circle class="nn-ring" cx="1040" cy="250"  r="5" style="--delay:1.08s"/>
-          <circle class="nn-ring" cx="1290" cy="630"  r="5" style="--delay:1.10s"/>
-          <circle class="nn-ring" cx="1410" cy="920"  r="5" style="--delay:1.32s"/>
-          <circle class="nn-ring" cx="630"  cy="148"  r="4" style="--delay:1.30s"/>
-          <circle class="nn-ring" cx="800"  cy="330"  r="4" style="--delay:1.30s"/>
-          <circle class="nn-ring" cx="1150" cy="790"  r="4" style="--delay:1.32s"/>
-          <circle class="nn-ring" cx="1260" cy="1060" r="4" style="--delay:1.52s"/>
-          <circle class="nn-ring" cx="360"  cy="210"  r="4" style="--delay:1.54s"/>
-          <circle class="nn-ring" cx="530"  cy="430"  r="4" style="--delay:1.52s"/>
-          <circle class="nn-ring" cx="980"  cy="960"  r="4" style="--delay:1.54s"/>
-          <circle class="nn-ring" cx="120"  cy="380"  r="3" style="--delay:1.80s"/>
-          <circle class="nn-ring" cx="290"  cy="580"  r="3" style="--delay:1.78s"/>
-          <circle class="nn-ring" cx="780"  cy="1060" r="3" style="--delay:1.78s"/>
-          <circle class="nn-ring" cx="60"   cy="500"  r="3" style="--delay:2.04s"/>
-          <circle class="nn-ring" cx="60"   cy="680"  r="3" style="--delay:2.02s"/>
-          <circle class="nn-ring" cx="1100" cy="1060" r="3" style="--delay:1.74s"/>
-          <!-- NODE DOTS (soma biggest, terminals tiny) -->
-          <circle class="nn-node" cx="1826" cy="28"   r="7" style="--delay:0.10s"/>
-          <circle class="nn-node" cx="1640" cy="68"   r="4" style="--delay:0.35s"/>
-          <circle class="nn-node" cx="1750" cy="215"  r="4" style="--delay:0.36s"/>
-          <circle class="nn-node" cx="1875" cy="235"  r="4" style="--delay:0.34s"/>
-          <circle class="nn-node" cx="1530" cy="52"   r="4" style="--delay:0.35s"/>
-          <circle class="nn-node" cx="1720" cy="355"  r="4" style="--delay:0.38s"/>
-          <circle class="nn-node" cx="1390" cy="55"   r="4" style="--delay:0.60s"/>
-          <circle class="nn-node" cx="1460" cy="185"  r="4" style="--delay:0.63s"/>
-          <circle class="nn-node" cx="1550" cy="345"  r="4" style="--delay:0.68s"/>
-          <circle class="nn-node" cx="1875" cy="460"  r="4" style="--delay:0.66s"/>
-          <circle class="nn-node" cx="1695" cy="570"  r="4" style="--delay:0.88s"/>
-          <circle class="nn-node" cx="1170" cy="72"   r="4" style="--delay:0.80s"/>
-          <circle class="nn-node" cx="1210" cy="215"  r="4" style="--delay:0.84s"/>
-          <circle class="nn-node" cx="1400" cy="490"  r="4" style="--delay:0.88s"/>
-          <circle class="nn-node" cx="1540" cy="730"  r="4" style="--delay:1.10s"/>
-          <circle class="nn-node" cx="900"  cy="105"  r="4" style="--delay:1.06s"/>
-          <circle class="nn-node" cx="1040" cy="250"  r="4" style="--delay:1.08s"/>
-          <circle class="nn-node" cx="1290" cy="630"  r="4" style="--delay:1.10s"/>
-          <circle class="nn-node" cx="1410" cy="920"  r="4" style="--delay:1.32s"/>
-          <circle class="nn-node" cx="630"  cy="148"  r="3" style="--delay:1.30s"/>
-          <circle class="nn-node" cx="800"  cy="330"  r="3" style="--delay:1.30s"/>
-          <circle class="nn-node" cx="1150" cy="790"  r="3" style="--delay:1.32s"/>
-          <circle class="nn-node" cx="1260" cy="1060" r="3" style="--delay:1.52s"/>
-          <circle class="nn-node" cx="360"  cy="210"  r="3" style="--delay:1.54s"/>
-          <circle class="nn-node" cx="530"  cy="430"  r="3" style="--delay:1.52s"/>
-          <circle class="nn-node" cx="980"  cy="960"  r="3" style="--delay:1.54s"/>
-          <circle class="nn-node" cx="120"  cy="380"  r="2" style="--delay:1.80s"/>
-          <circle class="nn-node" cx="290"  cy="580"  r="2" style="--delay:1.78s"/>
-          <circle class="nn-node" cx="780"  cy="1060" r="2" style="--delay:1.78s"/>
-          <circle class="nn-node" cx="60"   cy="500"  r="2" style="--delay:2.04s"/>
-          <circle class="nn-node" cx="60"   cy="680"  r="2" style="--delay:2.02s"/>
-          <circle class="nn-node" cx="1100" cy="1060" r="2" style="--delay:1.74s"/>
-          <!-- ELECTROCHEMICAL SIGNALS along main dendrite chain -->
-          <circle class="nn-signal" r="2.5" style="--delay:0.83s; offset-path:path('M 1826,28 Q 1672,20 1530,52')"/>
-          <circle class="nn-signal" r="2.5" style="--delay:0.85s; offset-path:path('M 1826,28 Q 1722,55 1640,68')"/>
-          <circle class="nn-signal" r="2.5" style="--delay:0.87s; offset-path:path('M 1826,28 Q 1788,198 1720,355')"/>
-          <circle class="nn-signal" r="2"   style="--delay:1.05s; offset-path:path('M 1530,52 Q 1456,32 1390,55')"/>
-          <circle class="nn-signal" r="2"   style="--delay:1.08s; offset-path:path('M 1640,68 Q 1546,108 1460,185')"/>
-          <circle class="nn-signal" r="2"   style="--delay:1.25s; offset-path:path('M 1390,55 Q 1278,42 1170,72')"/>
-          <circle class="nn-signal" r="2"   style="--delay:1.28s; offset-path:path('M 1460,185 Q 1334,172 1210,215')"/>
-          <circle class="nn-signal" r="2"   style="--delay:1.48s; offset-path:path('M 1170,72 Q 1032,68 900,105')"/>
-          <circle class="nn-signal" r="2"   style="--delay:1.50s; offset-path:path('M 1210,215 Q 1120,222 1040,250')"/>
-          <circle class="nn-signal" r="1.5" style="--delay:1.70s; offset-path:path('M 900,105 Q 762,110 630,148')"/>
-          <circle class="nn-signal" r="1.5" style="--delay:1.92s; offset-path:path('M 630,148 Q 494,162 360,210')"/>
-          <circle class="nn-signal" r="1.5" style="--delay:2.15s; offset-path:path('M 360,210 Q 234,285 120,380')"/>
+          <!-- ARM 1: left along top edge (180°) -->
+          <line class="nn-edge" x1="1826" y1="28"  x2="1526" y2="28"  style="--delay:0.40s"/>
+          <line class="nn-edge" x1="1526" y1="28"  x2="1226" y2="28"  style="--delay:0.70s"/>
+          <line class="nn-edge" x1="1226" y1="28"  x2="926"  y2="28"  style="--delay:1.00s"/>
+          <line class="nn-edge" x1="926"  y1="28"  x2="626"  y2="28"  style="--delay:1.30s"/>
+          <line class="nn-edge" x1="626"  y1="28"  x2="326"  y2="28"  style="--delay:1.60s"/>
+          <line class="nn-edge" x1="326"  y1="28"  x2="60"   y2="28"  style="--delay:1.87s"/>
+
+          <!-- ARM 2: sweep toward left-mid (200°) dir(-0.940, 0.342) -->
+          <line class="nn-edge" x1="1826" y1="28"  x2="1544" y2="131" style="--delay:0.40s"/>
+          <line class="nn-edge" x1="1544" y1="131" x2="1262" y2="233" style="--delay:0.70s"/>
+          <line class="nn-edge" x1="1262" y1="233" x2="980"  y2="335" style="--delay:1.00s"/>
+          <line class="nn-edge" x1="980"  y1="335" x2="698"  y2="438" style="--delay:1.30s"/>
+          <line class="nn-edge" x1="698"  y1="438" x2="416"  y2="540" style="--delay:1.60s"/>
+          <line class="nn-edge" x1="416"  y1="540" x2="60"   y2="712" style="--delay:1.97s"/>
+
+          <!-- ARM 3: sweep to bottom-left corner (215°) dir(-0.819, 0.574) -->
+          <line class="nn-edge" x1="1826" y1="28"  x2="1580" y2="200" style="--delay:0.40s"/>
+          <line class="nn-edge" x1="1580" y1="200" x2="1333" y2="372" style="--delay:0.70s"/>
+          <line class="nn-edge" x1="1333" y1="372" x2="1087" y2="544" style="--delay:1.00s"/>
+          <line class="nn-edge" x1="1087" y1="544" x2="840"  y2="716" style="--delay:1.30s"/>
+          <line class="nn-edge" x1="840"  y1="716" x2="594"  y2="888" style="--delay:1.60s"/>
+          <line class="nn-edge" x1="594"  y1="888" x2="354"  y2="1060" style="--delay:1.84s"/>
+
+          <!-- ARM 4: sweep to lower-center (230°) dir(-0.643, 0.766) -->
+          <line class="nn-edge" x1="1826" y1="28"  x2="1633" y2="258" style="--delay:0.40s"/>
+          <line class="nn-edge" x1="1633" y1="258" x2="1440" y2="488" style="--delay:0.70s"/>
+          <line class="nn-edge" x1="1440" y1="488" x2="1247" y2="718" style="--delay:1.00s"/>
+          <line class="nn-edge" x1="1247" y1="718" x2="1054" y2="948" style="--delay:1.30s"/>
+          <line class="nn-edge" x1="1054" y1="948" x2="960"  y2="1060" style="--delay:1.41s"/>
+
+          <!-- ARM 5: sweep to right-center-bottom (245°) dir(-0.423, 0.906) -->
+          <line class="nn-edge" x1="1826" y1="28"  x2="1699" y2="300" style="--delay:0.40s"/>
+          <line class="nn-edge" x1="1699" y1="300" x2="1572" y2="571" style="--delay:0.70s"/>
+          <line class="nn-edge" x1="1572" y1="571" x2="1445" y2="843" style="--delay:1.00s"/>
+          <line class="nn-edge" x1="1445" y1="843" x2="1345" y2="1060" style="--delay:1.21s"/>
+
+          <!-- ARM 6: right-lower sweep (260°) dir(-0.174, 0.985) -->
+          <line class="nn-edge" x1="1826" y1="28"  x2="1774" y2="323" style="--delay:0.40s"/>
+          <line class="nn-edge" x1="1774" y1="323" x2="1722" y2="619" style="--delay:0.70s"/>
+          <line class="nn-edge" x1="1722" y1="619" x2="1670" y2="914" style="--delay:1.00s"/>
+          <line class="nn-edge" x1="1670" y1="914" x2="1644" y2="1060" style="--delay:1.12s"/>
+
+          <!-- ARM 7: straight down right edge (270°) -->
+          <line class="nn-edge" x1="1826" y1="28"  x2="1826" y2="328" style="--delay:0.40s"/>
+          <line class="nn-edge" x1="1826" y1="328" x2="1826" y2="628" style="--delay:0.70s"/>
+          <line class="nn-edge" x1="1826" y1="628" x2="1826" y2="928" style="--delay:1.00s"/>
+          <line class="nn-edge" x1="1826" y1="928" x2="1826" y2="1060" style="--delay:1.10s"/>
+
+          <!-- SECONDARY BRANCHES: fork off main arms, no rings -->
+
+          <!-- B1: off ARM1[1226,28] → branch grows down-left -->
+          <line class="nn-edge" x1="1226" y1="28"  x2="1100" y2="220" style="--delay:0.78s"/>
+          <line class="nn-edge" x1="1100" y1="220" x2="930"  y2="440" style="--delay:1.00s"/>
+          <line class="nn-edge" x1="930"  y1="440" x2="730"  y2="700" style="--delay:1.22s"/>
+          <line class="nn-edge" x1="730"  y1="700" x2="560"  y2="880" style="--delay:1.44s"/>
+
+          <!-- B2: off ARM1[626,28] → branch grows down-left -->
+          <line class="nn-edge" x1="626"  y1="28"  x2="480"  y2="212" style="--delay:1.38s"/>
+          <line class="nn-edge" x1="480"  y1="212" x2="300"  y2="440" style="--delay:1.58s"/>
+          <line class="nn-edge" x1="300"  y1="440" x2="100"  y2="680" style="--delay:1.78s"/>
+
+          <!-- B3: off ARM1[326,28] → branch grows down toward left corner -->
+          <line class="nn-edge" x1="326"  y1="28"  x2="220"  y2="180" style="--delay:1.68s"/>
+          <line class="nn-edge" x1="220"  y1="180" x2="80"   y2="380" style="--delay:1.88s"/>
+          <line class="nn-edge" x1="80"   y1="380" x2="60"   y2="580" style="--delay:2.08s"/>
+
+          <!-- B4: off ARM2[980,335] → branch forks further down-left -->
+          <line class="nn-edge" x1="980"  y1="335" x2="920"  y2="490" style="--delay:1.05s"/>
+          <line class="nn-edge" x1="920"  y1="490" x2="820"  y2="680" style="--delay:1.25s"/>
+          <line class="nn-edge" x1="820"  y1="680" x2="680"  y2="940" style="--delay:1.45s"/>
+
+          <!-- B5: off ARM3[1333,372] → branch forks straight down -->
+          <line class="nn-edge" x1="1333" y1="372" x2="1340" y2="560" style="--delay:0.88s"/>
+          <line class="nn-edge" x1="1340" y1="560" x2="1300" y2="800" style="--delay:1.08s"/>
+          <line class="nn-edge" x1="1300" y1="800" x2="1240" y2="1000" style="--delay:1.28s"/>
+
+          <!-- B6: off ARM4[1247,718] → branch forks left -->
+          <line class="nn-edge" x1="1247" y1="718" x2="1100" y2="760" style="--delay:1.05s"/>
+          <line class="nn-edge" x1="1100" y1="760" x2="920"  y2="820" style="--delay:1.25s"/>
+          <line class="nn-edge" x1="920"  y1="820" x2="720"  y2="920" style="--delay:1.45s"/>
+          <line class="nn-edge" x1="720"  y1="920" x2="480"  y2="1040" style="--delay:1.65s"/>
+
+          <!-- B7: off ARM7[1826,628] → branch forks left-down -->
+          <line class="nn-edge" x1="1826" y1="628" x2="1680" y2="760" style="--delay:0.75s"/>
+          <line class="nn-edge" x1="1680" y1="760" x2="1480" y2="920" style="--delay:0.95s"/>
+          <line class="nn-edge" x1="1480" y1="920" x2="1280" y2="1040" style="--delay:1.15s"/>
+
+          <!-- ===== NODE RIPPLES ===== -->
+          <!-- Soma (origin at theme toggle) -->
+          <circle class="nn-ring" cx="1826" cy="28"   r="6" style="--delay:0.10s"/>
+          <!-- ARM nodes -->
+          <circle class="nn-ring" cx="1526" cy="28"   r="5" style="--delay:0.40s"/>
+          <circle class="nn-ring" cx="1544" cy="131"  r="5" style="--delay:0.40s"/>
+          <circle class="nn-ring" cx="1580" cy="200"  r="5" style="--delay:0.40s"/>
+          <circle class="nn-ring" cx="1633" cy="258"  r="5" style="--delay:0.40s"/>
+          <circle class="nn-ring" cx="1699" cy="300"  r="5" style="--delay:0.40s"/>
+          <circle class="nn-ring" cx="1774" cy="323"  r="5" style="--delay:0.40s"/>
+          <circle class="nn-ring" cx="1826" cy="328"  r="5" style="--delay:0.40s"/>
+          <circle class="nn-ring" cx="1226" cy="28"   r="5" style="--delay:0.70s"/>
+          <circle class="nn-ring" cx="1262" cy="233"  r="5" style="--delay:0.70s"/>
+          <circle class="nn-ring" cx="1333" cy="372"  r="5" style="--delay:0.70s"/>
+          <circle class="nn-ring" cx="1440" cy="488"  r="5" style="--delay:0.70s"/>
+          <circle class="nn-ring" cx="1572" cy="571"  r="5" style="--delay:0.70s"/>
+          <circle class="nn-ring" cx="1722" cy="619"  r="5" style="--delay:0.70s"/>
+          <circle class="nn-ring" cx="1826" cy="628"  r="5" style="--delay:0.70s"/>
+          <circle class="nn-ring" cx="926"  cy="28"   r="5" style="--delay:1.00s"/>
+          <circle class="nn-ring" cx="980"  cy="335"  r="5" style="--delay:1.00s"/>
+          <circle class="nn-ring" cx="1087" cy="544"  r="5" style="--delay:1.00s"/>
+          <circle class="nn-ring" cx="1247" cy="718"  r="5" style="--delay:1.00s"/>
+          <circle class="nn-ring" cx="1445" cy="843"  r="5" style="--delay:1.00s"/>
+          <circle class="nn-ring" cx="1670" cy="914"  r="5" style="--delay:1.00s"/>
+          <circle class="nn-ring" cx="1826" cy="928"  r="5" style="--delay:1.00s"/>
+          <circle class="nn-ring" cx="626"  cy="28"   r="5" style="--delay:1.30s"/>
+          <circle class="nn-ring" cx="1054" cy="948"  r="5" style="--delay:1.30s"/>
+          <circle class="nn-ring" cx="1345" cy="1060" r="5" style="--delay:1.21s"/>
+          <circle class="nn-ring" cx="1644" cy="1060" r="5" style="--delay:1.12s"/>
+          <circle class="nn-ring" cx="1826" cy="1060" r="5" style="--delay:1.10s"/>
+          <circle class="nn-ring" cx="326"  cy="28"   r="5" style="--delay:1.60s"/>
+          <circle class="nn-ring" cx="594"  cy="888"  r="5" style="--delay:1.60s"/>
+          <circle class="nn-ring" cx="960"  cy="1060" r="5" style="--delay:1.50s"/>
+          <circle class="nn-ring" cx="60"   cy="28"   r="5" style="--delay:1.87s"/>
+          <circle class="nn-ring" cx="60"   cy="712"  r="5" style="--delay:1.97s"/>
+          <circle class="nn-ring" cx="354"  cy="1060" r="5" style="--delay:1.84s"/>
+          <!-- Branch B1 nodes -->
+          <circle class="nn-ring" cx="1100" cy="220"  r="4" style="--delay:0.80s"/>
+          <circle class="nn-ring" cx="930"  cy="440"  r="4" style="--delay:1.02s"/>
+          <circle class="nn-ring" cx="730"  cy="700"  r="4" style="--delay:1.24s"/>
+          <circle class="nn-ring" cx="560"  cy="880"  r="4" style="--delay:1.46s"/>
+          <!-- Branch B2 nodes -->
+          <circle class="nn-ring" cx="480"  cy="212"  r="4" style="--delay:1.40s"/>
+          <circle class="nn-ring" cx="300"  cy="440"  r="4" style="--delay:1.60s"/>
+          <circle class="nn-ring" cx="100"  cy="680"  r="3" style="--delay:1.80s"/>
+          <!-- Branch B3 nodes -->
+          <circle class="nn-ring" cx="220"  cy="180"  r="4" style="--delay:1.70s"/>
+          <circle class="nn-ring" cx="80"   cy="380"  r="3" style="--delay:1.90s"/>
+          <circle class="nn-ring" cx="60"   cy="580"  r="3" style="--delay:2.10s"/>
+          <!-- Branch B4 nodes -->
+          <circle class="nn-ring" cx="920"  cy="490"  r="4" style="--delay:1.07s"/>
+          <circle class="nn-ring" cx="820"  cy="680"  r="4" style="--delay:1.27s"/>
+          <circle class="nn-ring" cx="680"  cy="940"  r="3" style="--delay:1.47s"/>
+          <!-- Branch B5 nodes -->
+          <circle class="nn-ring" cx="1340" cy="560"  r="4" style="--delay:0.90s"/>
+          <circle class="nn-ring" cx="1300" cy="800"  r="4" style="--delay:1.10s"/>
+          <circle class="nn-ring" cx="1240" cy="1000" r="3" style="--delay:1.30s"/>
+          <!-- Branch B6 nodes -->
+          <circle class="nn-ring" cx="1100" cy="760"  r="4" style="--delay:1.07s"/>
+          <circle class="nn-ring" cx="920"  cy="820"  r="4" style="--delay:1.27s"/>
+          <circle class="nn-ring" cx="720"  cy="920"  r="3" style="--delay:1.47s"/>
+          <circle class="nn-ring" cx="480"  cy="1040" r="3" style="--delay:1.67s"/>
+          <!-- Branch B7 nodes -->
+          <circle class="nn-ring" cx="1680" cy="760"  r="4" style="--delay:0.77s"/>
+          <circle class="nn-ring" cx="1480" cy="920"  r="4" style="--delay:0.97s"/>
+          <circle class="nn-ring" cx="1280" cy="1040" r="3" style="--delay:1.17s"/>
+
+          <!-- ===== NODE DOTS ===== -->
+          <circle class="nn-node" cx="1826" cy="28"   r="6" style="--delay:0.10s"/>
+          <circle class="nn-node" cx="1526" cy="28"   r="4" style="--delay:0.40s"/>
+          <circle class="nn-node" cx="1544" cy="131"  r="4" style="--delay:0.40s"/>
+          <circle class="nn-node" cx="1580" cy="200"  r="4" style="--delay:0.40s"/>
+          <circle class="nn-node" cx="1633" cy="258"  r="4" style="--delay:0.40s"/>
+          <circle class="nn-node" cx="1699" cy="300"  r="4" style="--delay:0.40s"/>
+          <circle class="nn-node" cx="1774" cy="323"  r="4" style="--delay:0.40s"/>
+          <circle class="nn-node" cx="1826" cy="328"  r="4" style="--delay:0.40s"/>
+          <circle class="nn-node" cx="1226" cy="28"   r="4" style="--delay:0.70s"/>
+          <circle class="nn-node" cx="1262" cy="233"  r="4" style="--delay:0.70s"/>
+          <circle class="nn-node" cx="1333" cy="372"  r="4" style="--delay:0.70s"/>
+          <circle class="nn-node" cx="1440" cy="488"  r="4" style="--delay:0.70s"/>
+          <circle class="nn-node" cx="1572" cy="571"  r="4" style="--delay:0.70s"/>
+          <circle class="nn-node" cx="1722" cy="619"  r="4" style="--delay:0.70s"/>
+          <circle class="nn-node" cx="1826" cy="628"  r="4" style="--delay:0.70s"/>
+          <circle class="nn-node" cx="926"  cy="28"   r="4" style="--delay:1.00s"/>
+          <circle class="nn-node" cx="980"  cy="335"  r="4" style="--delay:1.00s"/>
+          <circle class="nn-node" cx="1087" cy="544"  r="4" style="--delay:1.00s"/>
+          <circle class="nn-node" cx="1247" cy="718"  r="4" style="--delay:1.00s"/>
+          <circle class="nn-node" cx="1445" cy="843"  r="4" style="--delay:1.00s"/>
+          <circle class="nn-node" cx="1670" cy="914"  r="4" style="--delay:1.00s"/>
+          <circle class="nn-node" cx="1826" cy="928"  r="4" style="--delay:1.00s"/>
+          <circle class="nn-node" cx="626"  cy="28"   r="4" style="--delay:1.30s"/>
+          <circle class="nn-node" cx="1054" cy="948"  r="4" style="--delay:1.30s"/>
+          <circle class="nn-node" cx="1345" cy="1060" r="4" style="--delay:1.21s"/>
+          <circle class="nn-node" cx="1644" cy="1060" r="4" style="--delay:1.12s"/>
+          <circle class="nn-node" cx="1826" cy="1060" r="4" style="--delay:1.10s"/>
+          <circle class="nn-node" cx="326"  cy="28"   r="4" style="--delay:1.60s"/>
+          <circle class="nn-node" cx="594"  cy="888"  r="4" style="--delay:1.60s"/>
+          <circle class="nn-node" cx="960"  cy="1060" r="4" style="--delay:1.50s"/>
+          <circle class="nn-node" cx="60"   cy="28"   r="4" style="--delay:1.87s"/>
+          <circle class="nn-node" cx="60"   cy="712"  r="4" style="--delay:1.97s"/>
+          <circle class="nn-node" cx="354"  cy="1060" r="4" style="--delay:1.84s"/>
+          <circle class="nn-node" cx="1100" cy="220"  r="3" style="--delay:0.80s"/>
+          <circle class="nn-node" cx="930"  cy="440"  r="3" style="--delay:1.02s"/>
+          <circle class="nn-node" cx="730"  cy="700"  r="3" style="--delay:1.24s"/>
+          <circle class="nn-node" cx="560"  cy="880"  r="3" style="--delay:1.46s"/>
+          <circle class="nn-node" cx="480"  cy="212"  r="3" style="--delay:1.40s"/>
+          <circle class="nn-node" cx="300"  cy="440"  r="3" style="--delay:1.60s"/>
+          <circle class="nn-node" cx="100"  cy="680"  r="2" style="--delay:1.80s"/>
+          <circle class="nn-node" cx="220"  cy="180"  r="3" style="--delay:1.70s"/>
+          <circle class="nn-node" cx="80"   cy="380"  r="2" style="--delay:1.90s"/>
+          <circle class="nn-node" cx="60"   cy="580"  r="2" style="--delay:2.10s"/>
+          <circle class="nn-node" cx="920"  cy="490"  r="3" style="--delay:1.07s"/>
+          <circle class="nn-node" cx="820"  cy="680"  r="3" style="--delay:1.27s"/>
+          <circle class="nn-node" cx="680"  cy="940"  r="2" style="--delay:1.47s"/>
+          <circle class="nn-node" cx="1340" cy="560"  r="3" style="--delay:0.90s"/>
+          <circle class="nn-node" cx="1300" cy="800"  r="3" style="--delay:1.10s"/>
+          <circle class="nn-node" cx="1240" cy="1000" r="2" style="--delay:1.30s"/>
+          <circle class="nn-node" cx="1100" cy="760"  r="3" style="--delay:1.07s"/>
+          <circle class="nn-node" cx="920"  cy="820"  r="3" style="--delay:1.27s"/>
+          <circle class="nn-node" cx="720"  cy="920"  r="2" style="--delay:1.47s"/>
+          <circle class="nn-node" cx="480"  cy="1040" r="2" style="--delay:1.67s"/>
+          <circle class="nn-node" cx="1680" cy="760"  r="3" style="--delay:0.77s"/>
+          <circle class="nn-node" cx="1480" cy="920"  r="3" style="--delay:0.97s"/>
+          <circle class="nn-node" cx="1280" cy="1040" r="2" style="--delay:1.17s"/>
+
+          <!-- ===== SIGNAL PULSES: burst from soma along main arms ===== -->
+          <circle class="nn-signal" r="3" style="--delay:0.88s; offset-path:path('M 1826,28 L 1526,28')"/>
+          <circle class="nn-signal" r="3" style="--delay:0.90s; offset-path:path('M 1826,28 L 1544,131')"/>
+          <circle class="nn-signal" r="3" style="--delay:0.92s; offset-path:path('M 1826,28 L 1580,200')"/>
+          <circle class="nn-signal" r="3" style="--delay:0.96s; offset-path:path('M 1826,28 L 1826,328')"/>
+          <circle class="nn-signal" r="2" style="--delay:1.10s; offset-path:path('M 1526,28 L 1226,28')"/>
+          <circle class="nn-signal" r="2" style="--delay:1.10s; offset-path:path('M 1580,200 L 1333,372')"/>
+          <circle class="nn-signal" r="2" style="--delay:1.12s; offset-path:path('M 1633,258 L 1440,488')"/>
+          <circle class="nn-signal" r="2" style="--delay:1.25s; offset-path:path('M 1226,28 L 1100,220')"/>
+          <circle class="nn-signal" r="2" style="--delay:1.40s; offset-path:path('M 1333,372 L 1087,544')"/>
+          <circle class="nn-signal" r="2" style="--delay:1.40s; offset-path:path('M 1100,220 L 930,440')"/>
+          <circle class="nn-signal" r="2" style="--delay:1.05s; offset-path:path('M 1826,628 L 1680,760')"/>
+          <circle class="nn-signal" r="1.5" style="--delay:1.45s; offset-path:path('M 930,440 L 730,700')"/>
         </svg>
 
         <!-- Title -->
