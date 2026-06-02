@@ -3276,10 +3276,13 @@
 
     // ── Render response AI — support teks + HTML/ECharts code block ─────────
     window._renderAIResponse = function(raw) {
-      // Ganti SEMUA ```html ... ``` block (global)
-      var hasChart = false;
-      var result = raw.replace(/```html\s*([\s\S]*?)```/gi, function(_, blockContent) {
-        hasChart = true;
+      window._pendingChartScripts = window._pendingChartScripts || {};
+      var chartBlocks = {};
+
+      // 1. Ekstrak semua ```html block, ganti dengan placeholder ##CHART_X##
+      var idx = 0;
+      var withPlaceholders = raw.replace(/```html\s*([\s\S]*?)```/gi, function(_, blockContent) {
+        var placeholder = '##CHART_' + (idx++) + '##';
         var chartId = 'ai-chart-' + Date.now() + '-' + Math.random().toString(36).slice(2,5);
 
         var scriptMatch = blockContent.match(/<script[^>]*>([\s\S]*?)<\/script>/i);
@@ -3287,29 +3290,34 @@
 
         var origIdMatch = divOnly.match(/id=["']([^'"]+)['"]/);
         var origId = origIdMatch ? origIdMatch[1] : 'mychart';
-
         divOnly = divOnly.replace(new RegExp('id=["\']' + origId + '["\']', 'g'), 'id="' + chartId + '"');
 
-        var scriptCode = '';
         if (scriptMatch) {
           var sc = scriptMatch[1]
             .replace(new RegExp("(['\"])" + origId + "\\1", 'g'), '"' + chartId + '"')
             .replace(/document\.getElementById\(['"][^'"]*['"]\)/g, 'document.getElementById("' + chartId + '")');
           sc = sc.replace(/\.setOption\s*\(\s*\{/, '.setOption({backgroundColor:"transparent",textStyle:{color:"#94a3b8"},');
-          scriptCode = '(function(){\n' + sc + '\n})();';
+          window._pendingChartScripts[chartId] = '(function(){\n' + sc + '\n})();';
         }
 
-        window._pendingChartScripts = window._pendingChartScripts || {};
-        window._pendingChartScripts[chartId] = scriptCode;
-
-        return '<div style="background:var(--b2);border:1px solid var(--sep);border-radius:10px;overflow:hidden;margin:8px 0;">' +
+        chartBlocks[placeholder] =
+          '<div style="background:var(--b2);border:1px solid var(--sep);border-radius:10px;overflow:hidden;margin:8px 0;">' +
           '<div style="font-size:10px;color:var(--t3);padding:6px 12px;border-bottom:1px solid var(--sep);">📊 Chart — dari AI</div>' +
           '<div style="padding:8px 4px;">' + divOnly + '</div>' +
-          '</div>' +
-          '<span data-chart-id="' + chartId + '" style="display:none;"></span>';
+          '</div><span data-chart-id="' + chartId + '" style="display:none;"></span>';
+
+        return placeholder;
       });
 
-      return window._mdToHtml(result);
+      // 2. Proses teks biasa dengan _mdToHtml
+      var html = window._mdToHtml(withPlaceholders);
+
+      // 3. Kembalikan chart blocks (placeholder tidak akan diubah _mdToHtml)
+      Object.keys(chartBlocks).forEach(function(p) {
+        html = html.replace(new RegExp(p.replace(/##/g,'\\#\\#'), 'g'), chartBlocks[p]);
+      });
+
+      return html;
     };
 
     window._execPendingCharts = function() {
