@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 
 <head>
@@ -2719,6 +2719,15 @@
             <span class="chat-system-text">Tanya apa saja tentang data, KPI, atau dokumentasi operasional.</span>
           </div>
           <div id="chat-history" style="display:none; max-height: 400px; overflow-y: auto; padding: 16px 20px; border-bottom: 1px solid var(--bor); scroll-behavior: smooth;"></div>
+          <!-- Quick chart presets -->
+          <div id="chat-presets" style="display:flex;gap:6px;flex-wrap:wrap;padding:10px 14px;border-top:1px solid var(--sep);">
+            <span style="font-size:10px;font-weight:700;color:var(--t3);letter-spacing:.05em;align-self:center;">CHART CEPAT:</span>
+            <button onclick="window.renderPresetChart('funnel')" style="font-size:11px;padding:4px 10px;border-radius:6px;border:1px solid var(--sep);background:transparent;color:var(--t2);cursor:pointer;">📊 Funnel All Brand</button>
+            <button onclick="window.renderPresetChart('ctp')"    style="font-size:11px;padding:4px 10px;border-radius:6px;border:1px solid var(--sep);background:transparent;color:var(--t2);cursor:pointer;">🔁 % C→P per Brand</button>
+            <button onclick="window.renderPresetChart('cost')"   style="font-size:11px;padding:4px 10px;border-radius:6px;border:1px solid var(--sep);background:transparent;color:var(--t2);cursor:pointer;">💰 Cost/Chat</button>
+            <button onclick="window.renderPresetChart('revenue')" style="font-size:11px;padding:4px 10px;border-radius:6px;border:1px solid var(--sep);background:transparent;color:var(--t2);cursor:pointer;">📈 Revenue</button>
+            <button onclick="window.renderPresetChart('weekly_tanam')" style="font-size:11px;padding:4px 10px;border-radius:6px;border:1px solid var(--sep);background:transparent;color:var(--t2);cursor:pointer;">📅 Weekly TANAM</button>
+          </div>
           <div class="chat-input-row">
             <input type="text" id="ai-input"
               placeholder="Contoh: bagaimana performa RATA bulan ini?"
@@ -2776,6 +2785,7 @@
   <script src="libs/cytoscape.min.js"></script>
   <script src="data.js"></script>
   <script src="dashboard_data.js"></script>
+  <script src="dashboard_context.js"></script>
   <script>
     // Visual Error Handler for local debugging & pair programming
     window.onerror = function (msg, url, lineNo, columnNo, error) {
@@ -3202,18 +3212,17 @@
       }
       if (blk.type === 'mermaid' || blk.type === 'diagram') {
         const code = (blk.code || '').trim();
-        // Render flowchart as readable text in chat — replace arrows & clean up
         const readable = code
           .replace(/flowchart\s+\w+\n?/i, '')
-          .replace(/subgraph\s+\w+\s*\[?"?([^"\]]+)"?\]?/gi, '\n\u2500\u2500 $1 \u2500\u2500')
+          .replace(/subgraph\s+\w+\s*\[?"?([^"\]]+)"?\]?/gi, '\n─── $1 ───')
           .replace(/end\b/gi, '')
-          .replace(/-->\|"?([^"|\n]+)"?\|/g, ' \u2192[$1]\u2192 ')
-          .replace(/-->/g, ' \u2192 ')
-          .replace(/\["([^"]+)"\]/g, (_, t) => ' ' + t.replace(/\\n/g, ' \u00b7 '))
-          .replace(/\[([^\]]+)\]/g, (_, t) => ' ' + t.replace(/\\n/g, ' \u00b7 '))
+          .replace(/-->\|"?([^"|\n]+)"?\|/g, ' →[$1]→ ')
+          .replace(/-->/g, ' → ')
+          .replace(/\["([^"]+)"\]/g, (_, t) => ' ' + t.replace(/\\n/g, ' · '))
+          .replace(/\[([^\]]+)\]/g, (_, t) => ' ' + t.replace(/\\n/g, ' · '))
           .replace(/\s{2,}/g, ' ')
           .split('\n').map(l => l.trim()).filter(l => l.length > 1).join('\n');
-        return `<div style="background:rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.08);border-radius:10px;padding:12px 16px;font-size:12px;color:var(--t2);"><div style="font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--t3);text-transform:uppercase;margin-bottom:8px;">\uD83D\uDCCA Flow Diagram</div><pre style="margin:0;white-space:pre-wrap;line-height:1.7;font-family:inherit;font-size:12px;">${readable}</pre><div style="margin-top:8px;font-size:10px;color:var(--t3);">Buka sidebar untuk visualisasi lengkap</div></div>`;
+        return `<div style="background:rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.08);border-radius:10px;padding:12px 16px;font-size:12px;color:var(--t2);"><div style="font-size:10px;font-weight:700;letter-spacing:.06em;color:var(--t3);text-transform:uppercase;margin-bottom:8px;">📊 Flow Diagram</div><pre style="margin:0;white-space:pre-wrap;line-height:1.7;font-family:inherit;font-size:12px;">${readable}</pre><div style="margin-top:8px;font-size:10px;color:var(--t3);">Buka sidebar untuk visualisasi lengkap</div></div>`;
       }
       return '';
     }
@@ -3228,187 +3237,332 @@
     }
 
     // Indonesian stop words
-    const _STOP = new Set(['apa', 'itu', 'yang', 'dari', 'adalah', 'cara', 'bagaimana', 'berapa', 'dimana', 'kenapa', 'mengapa', 'untuk', 'dengan', 'dan', 'atau', 'ini', 'jika', 'bila', 'saat', 'ketika', 'pada', 'dalam', 'ke', 'di', 'oleh', 'nya', 'lah', 'kah', 'bisa', 'buat', 'gimana', 'tentang', 'soal']);
+    const _STOP = new Set(['apa','itu','yang','dari','adalah','cara','bagaimana','berapa','dimana','kenapa','mengapa','untuk','dengan','dan','atau','ini','jika','bila','saat','ketika','pada','dalam','ke','di','oleh','nya','lah','kah','bisa','buat','gimana','tentang','soal']);
 
-    window.askAI = function (mId) {
+    // ── Render response AI — support teks + HTML/ECharts code block ─────────
+    window._renderAIResponse = function(raw) {
+      var htmlBlock = raw.match(/```html\s*([\s\S]*?)```/i);
+      if (htmlBlock) {
+        var beforeCode = raw.slice(0, raw.indexOf('```html')).trim();
+        var afterCode  = raw.slice(raw.indexOf('```html') + htmlBlock[0].length).trim();
+        var chartId = 'ai-chart-' + Date.now();
+        var blockContent = htmlBlock[1];
+
+        // Ekstrak script
+        var scriptMatch = blockContent.match(/<script[^>]*>([\s\S]*?)<\/script>/i);
+        var divOnly = blockContent.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '').trim();
+
+        // Cari id asli yang dipakai AI di div-nya
+        var origIdMatch = divOnly.match(/id=["']([^'"]+)['"]/);
+        var origId = origIdMatch ? origIdMatch[1] : 'mychart';
+
+        // Ganti origId → chartId unik di div
+        divOnly = divOnly.replace(new RegExp('id=["\']' + origId + '["\']', 'g'), 'id="' + chartId + '"');
+
+        // Ganti origId → chartId di script, lalu wrap dalam IIFE untuk isolasi scope
+        var scriptCode = '';
+        if (scriptMatch) {
+          var sc = scriptMatch[1]
+            .replace(new RegExp("(['\"])" + origId + "\\1", 'g'), '"' + chartId + '"')
+            .replace(/document\.getElementById\(['"][^'"]*['"]\)/g, 'document.getElementById("' + chartId + '")');
+          // Inject background transparent + label color ke semua setOption calls
+          sc = sc.replace(/\.setOption\s*\(\s*\{/, '.setOption({backgroundColor:"transparent",textStyle:{color:"#94a3b8"},');
+          scriptCode = '(function(){\n' + sc + '\n})();';
+        }
+
+        window._pendingChartScripts = window._pendingChartScripts || {};
+        window._pendingChartScripts[chartId] = scriptCode;
+
+        var beforeRendered = beforeCode ? window._mdToHtml(beforeCode) : '';
+        var afterRendered  = afterCode  ? window._mdToHtml(afterCode)  : '';
+
+        return (beforeRendered ? beforeRendered + '<br>' : '') +
+          '<div style="background:var(--b2);border:1px solid var(--sep);border-radius:10px;overflow:hidden;margin:8px 0;">' +
+            '<div style="font-size:10px;color:var(--t3);padding:6px 12px;border-bottom:1px solid var(--sep);">📊 Chart — dari AI</div>' +
+            '<div style="padding:8px 4px;">' + divOnly + '</div>' +
+          '</div>' +
+          (afterRendered ? '<br>' + afterRendered : '') +
+          '<span data-chart-id="' + chartId + '" style="display:none;"></span>';
+      }
+      return window._mdToHtml(raw);
+    };
+
+    window._execPendingCharts = function() {
+      document.querySelectorAll('span[data-chart-id]').forEach(function(m) {
+        var id = m.getAttribute('data-chart-id');
+        var code = (window._pendingChartScripts || {})[id];
+        var el = document.getElementById(id);
+        if (code && el) {
+          try {
+            // Pastikan container punya dimensi sebelum init
+            if (!el.style.height) el.style.height = '250px';
+            el.style.width = '100%';
+            new Function(code)();
+          } catch(e) { console.warn('Chart exec error:', e, '\nCode:', code); }
+          delete window._pendingChartScripts[id];
+          m.remove();
+        }
+      });
+    };
+
+    window._mdToHtml = function(txt) {
+      return txt
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/^### (.*)/gm, '<p style="font-size:13px;font-weight:700;color:var(--t1);margin:10px 0 4px;">$1</p>')
+        .replace(/^## (.*)/gm, '<p style="font-size:14px;font-weight:700;color:var(--t1);margin:12px 0 5px;">$1</p>')
+        .replace(/^- (.*)/gm, '<li style="margin-left:16px;margin-bottom:3px;">$1</li>')
+        .replace(/\n\n/g, '</p><p style="margin-bottom:10px;margin-top:10px;">')
+        .replace(/\n/g, '<br>')
+        .replace(/^/, '<p style="margin-bottom:10px;">')
+        .replace(/$/, '</p>');
+    };
+
+    // ── Preset charts — render langsung dari DASHBOARD_CONTEXT ──────────────
+    window.renderPresetChart = function(type) {
+      if (typeof DASHBOARD_CONTEXT === 'undefined') {
+        alert('dashboard_context.js belum dimuat.');
+        return;
+      }
+      var d = DASHBOARD_CONTEXT;
+      var historyEl = document.getElementById('chat-history');
+      historyEl.style.display = 'block';
+
+      var chartId = 'preset-' + type + '-' + Date.now();
+      var cfg = null;
+      var title = '';
+
+      if (type === 'funnel') {
+        title = 'Funnel Volume per Brand — ' + d.meta.periode;
+        cfg = {
+          tooltip: { trigger: 'axis' },
+          legend: { data: ['TANAM','RATA','VINIR'], bottom: 0, textStyle: { fontSize: 11, color: '#94a3b8' } },
+          xAxis: { type: 'category', data: ['Chat','Prospect','Booking','Visit','Buy'], axisLabel: { color: '#94a3b8', fontSize: 10 } },
+          yAxis: { type: 'value', axisLabel: { color: '#94a3b8', fontSize: 9 } },
+          grid: { left: '3%', right: '3%', bottom: '18%', top: '8%', containLabel: true },
+          series: [
+            { name: 'TANAM', type: 'bar', barMaxWidth: 35, data: [68858, 768, 1411, 838, 604], itemStyle: { color: '#60a5fa', borderRadius: [4,4,0,0] } },
+            { name: 'RATA',  type: 'bar', barMaxWidth: 35, data: [15500, 3002, 460, 453, 0],   itemStyle: { color: '#34d399', borderRadius: [4,4,0,0] } },
+            { name: 'VINIR', type: 'bar', barMaxWidth: 35, data: [6648,  911,  163, 94,  56],  itemStyle: { color: '#f472b6', borderRadius: [4,4,0,0] } },
+          ]
+        };
+      } else if (type === 'ctp') {
+        title = '% Konversi Chat ke Prospect (C→P) — ' + d.meta.periode;
+        cfg = {
+          tooltip: { trigger: 'axis', formatter: '{b}: {c}%' },
+          xAxis: { type: 'category', data: ['TANAM','RATA','VINIR'], axisLabel: { color: '#94a3b8' } },
+          yAxis: { type: 'value', axisLabel: { formatter: '{value}%', color: '#94a3b8', fontSize: 9 } },
+          grid: { left: '3%', right: '3%', bottom: '8%', top: '10%', containLabel: true },
+          series: [{ type: 'bar', barMaxWidth: 50, data: [
+            { value: 1.1,  itemStyle: { color: '#f59e0b', borderRadius: [6,6,0,0] } },
+            { value: 19.4, itemStyle: { color: '#34d399', borderRadius: [6,6,0,0] } },
+            { value: 13.7, itemStyle: { color: '#f472b6', borderRadius: [6,6,0,0] } },
+          ], label: { show: true, position: 'top', formatter: '{c}%', color: '#94a3b8', fontSize: 11 } }]
+        };
+      } else if (type === 'cost') {
+        title = 'Cost per Chat per Brand — ' + d.meta.periode;
+        cfg = {
+          tooltip: { trigger: 'axis', formatter: function(p) { return p[0].name + ': Rp ' + p[0].value.toLocaleString('id-ID'); } },
+          xAxis: { type: 'category', data: ['TANAM','RATA','VINIR'], axisLabel: { color: '#94a3b8' } },
+          yAxis: { type: 'value', axisLabel: { color: '#94a3b8', fontSize: 9, formatter: function(v){ return 'Rp '+(v/1000).toFixed(0)+'K'; } } },
+          grid: { left: '3%', right: '3%', bottom: '8%', top: '10%', containLabel: true },
+          series: [{ type: 'bar', barMaxWidth: 50, data: [
+            { value: 26574, itemStyle: { color: '#60a5fa', borderRadius: [6,6,0,0] } },
+            { value: 17329, itemStyle: { color: '#34d399', borderRadius: [6,6,0,0] } },
+            { value: 31979, itemStyle: { color: '#f472b6', borderRadius: [6,6,0,0] } },
+          ], label: { show: true, position: 'top', formatter: function(p){ return 'Rp '+(p.value/1000).toFixed(1)+'K'; }, color: '#94a3b8', fontSize: 10 } }]
+        };
+      } else if (type === 'revenue') {
+        title = 'Revenue vs Target — ' + d.meta.periode;
+        cfg = {
+          tooltip: { trigger: 'axis' },
+          legend: { data: ['Actual','Target'], bottom: 0, textStyle: { fontSize: 11, color: '#94a3b8' } },
+          xAxis: { type: 'category', data: ['TANAM','RATA'], axisLabel: { color: '#94a3b8' } },
+          yAxis: { type: 'value', axisLabel: { color: '#94a3b8', fontSize: 9, formatter: function(v){ return (v/1e9).toFixed(1)+'M'; } } },
+          grid: { left: '3%', right: '3%', bottom: '18%', top: '10%', containLabel: true },
+          series: [
+            { name: 'Actual', type: 'bar', barMaxWidth: 50, data: [1829835000, 2771000000], itemStyle: { color: '#34d399', borderRadius: [6,6,0,0] }, label: { show: true, position: 'top', formatter: function(p){ return (p.value/1e9).toFixed(2)+'M'; }, color: '#94a3b8', fontSize: 10 } },
+            { name: 'Target', type: 'bar', barMaxWidth: 50, data: [1829835000, null], itemStyle: { color: 'transparent', borderColor: '#94a3b8', borderWidth: 2, borderRadius: [6,6,0,0] } },
+          ]
+        };
+      } else if (type === 'weekly_tanam') {
+        title = 'Weekly Chat TANAM — ' + d.meta.periode;
+        cfg = {
+          tooltip: { trigger: 'axis' },
+          xAxis: { type: 'category', data: ['W1','W2','W3','W4'], axisLabel: { color: '#94a3b8' } },
+          yAxis: { type: 'value', axisLabel: { color: '#94a3b8', fontSize: 9 } },
+          grid: { left: '3%', right: '3%', bottom: '8%', top: '10%', containLabel: true },
+          series: [{ type: 'line', smooth: true, data: [18600, 19200, 17800, 13258],
+            itemStyle: { color: '#60a5fa' }, lineStyle: { color: '#60a5fa', width: 2.5 },
+            areaStyle: { color: { type: 'linear', x:0,y:0,x2:0,y2:1, colorStops: [{offset:0,color:'rgba(96,165,250,0.3)'},{offset:1,color:'rgba(96,165,250,0)'}] } },
+            label: { show: true, color: '#94a3b8', fontSize: 10, formatter: function(p){ return '~'+p.value.toLocaleString('id-ID'); } }
+          }]
+        };
+      }
+
+      if (!cfg) return;
+
+      var msgEl = document.createElement('div');
+      msgEl.style.cssText = 'margin-bottom:16px;';
+      msgEl.innerHTML =
+        '<div style="font-size:11px;font-weight:700;color:var(--t3);margin-bottom:6px;letter-spacing:.04em;">📊 ' + title + '</div>' +
+        '<div style="background:var(--b2);border:1px solid var(--sep);border-radius:10px;padding:16px;">' +
+          '<div id="' + chartId + '" style="height:220px;width:100%;"></div>' +
+        '</div>';
+      historyEl.appendChild(msgEl);
+
+      setTimeout(function() {
+        if (typeof echarts !== 'undefined') {
+          var c = echarts.init(document.getElementById(chartId));
+          c.setOption(cfg);
+          window.addEventListener('resize', function(){ c.resize(); });
+        }
+        historyEl.scrollTo({ top: historyEl.scrollHeight, behavior: 'smooth' });
+      }, 50);
+    };
+
+    // Ambil API key dari localStorage, minta input jika belum ada
+    function _getApiKey() {
+      var k = localStorage.getItem('goh_dskey');
+      if (!k) {
+        k = prompt('Masukkan DeepSeek API Key untuk mengaktifkan AI Assistant:\n(Akan disimpan di browser ini)');
+        if (k && k.trim()) localStorage.setItem('goh_dskey', k.trim());
+      }
+      return k ? k.trim() : null;
+    }
+
+    window.askAI = async function () {
       const inputEl = document.getElementById('ai-input');
       const rawQuery = inputEl.value.trim();
-      const query = rawQuery.toLowerCase();
-      if (!query) return;
+      if (!rawQuery) return;
+
+      const apiKey = _getApiKey();
+      if (!apiKey) return;
 
       const historyEl = document.getElementById('chat-history');
       historyEl.style.display = 'block';
 
-      // user bubble
       const userMsg = document.createElement('div');
       userMsg.style.cssText = 'margin-bottom:16px;display:flex;justify-content:flex-end;';
-      userMsg.innerHTML = `<div style="background:var(--t1);color:#fff;padding:12px 18px;border-radius:20px 20px 4px 20px;font-size:14.5px;max-width:85%;box-shadow:var(--shadow-sm);">${rawQuery}</div>`;
+      userMsg.innerHTML = `<div style="background:var(--act);color:#fff;padding:12px 18px;border-radius:20px 20px 4px 20px;font-size:14.5px;max-width:85%;">${rawQuery}</div>`;
       historyEl.appendChild(userMsg);
       inputEl.value = '';
 
-      // AI bubble — loading state
       const aiMsg = document.createElement('div');
-      aiMsg.style.cssText = 'margin-bottom:16px;display:flex;justify-content:flex-start;align-items:flex-start;gap:12px;';
-      const isLight = document.body.classList.contains('light-theme');
-      const aiBorder = isLight ? 'rgba(15,23,42,0.08)' : 'rgba(255,255,255,0.2)';
-      const aiShadow = isLight ? '0 2px 16px rgba(0,0,0,0.03), inset 0 1px 0 rgba(255,255,255,0.8)' : '0 2px 16px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.5)';
-      aiMsg.innerHTML = `
-      <div class="chat-avatar" style="color:var(--t2);">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M8 15h8l-1 6H9l-1-6Z" />
-          <path d="M12 15V5" />
-          <path d="M12 9a3 3 0 0 0-3-3 3 3 0 0 0 3 3" />
-          <path d="M12 5a3 3 0 0 1 3-3 3 3 0 0 1-3 3" />
-        </svg>
-      </div>
-      <div class="ai-content" style="background:transparent;border:1px solid ${aiBorder};padding:14px 18px;border-radius:20px 20px 20px 4px;font-size:14.5px;color:var(--t1);max-width:85%;box-shadow:${aiShadow};backdrop-filter:blur(48px) saturate(180%);-webkit-backdrop-filter:blur(48px) saturate(180%);">
-        <span style="display:inline-block;animation:blink 1s infinite;">Menyusun jawaban...</span>
-      </div>`;
+      aiMsg.innerHTML = `<div class="ai-content" style="padding:14px;border:1px solid #eee;border-radius:12px;"><span>Thinking...</span></div>`;
       historyEl.appendChild(aiMsg);
-      if (mId) {
-        const h = document.getElementById(mId);
-        if (h) h.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-      setTimeout(() => {
-        // keyword prep — strip stop words, keep len >= 2
-        // ── detect brand / team filter in query ──
-        const _BRANDS = ['rata', 'tanam', 'vinir'];
-        const _TEAMS = ['cs', 'sch', 'conversion', 'retention'];
-        const brandFilter = _BRANDS.find(b => query.includes(b)) || null;
-        const teamFilter = _TEAMS.find(t => {
-          // match whole-word: " cs " / "di cs" / "cs " etc.
-          return new RegExp('(^|\\s)' + t + '(\\s|$)').test(query);
-        }) || null;
 
-        // strip brand/team names + stop words from keyword list
-        const _STRUCT = new Set([..._BRANDS, ..._TEAMS, 'di', 'untuk', 'dari', 'tentang', 'soal', 'pada']);
-        const keywords = query.split(/\s+/).map(k => k.replace(/[^a-z0-9%]/g, '')).filter(k => k.length >= 2 && !_STOP.has(k) && !_STRUCT.has(k));
-        if (keywords.length === 0) keywords.push(...query.split(/\s+/).map(k => k.replace(/[^a-z0-9%]/g, '')).filter(k => k.length >= 2 && !_STRUCT.has(k)));
+      // ── Build konteks dari DATA lokal ───────────────────────────────────
+      const query = rawQuery.toLowerCase();
+      const _BRANDS = ['rata','tanam','vinir'];
+      const _TEAMS = ['cs','sch','conversion','retention'];
+      const brandFilter = _BRANDS.find(b => query.includes(b)) || null;
+      const teamFilter = _TEAMS.find(t => new RegExp('(^|\\s)'+t+'(\\s|$)').test(query)) || null;
+      const _STRUCT = new Set([..._BRANDS,..._TEAMS,'di','untuk','dari','tentang','soal','pada']);
+      const keywords = query.split(/\s+/).map(k => k.replace(/[^a-z0-9%]/g,'')).filter(k => k.length>=2 && !_STOP.has(k) && !_STRUCT.has(k));
 
-        const results = [];
-
-        // ── intent: data flow / lineage trace ──
-        const _FLOW_KW = ['alur','flow','trace','lineage','sumber','dari mana','darimana','kolom','formula','pipeline data','data flow','asal data','asal','titik rawan','putus','fragile','rantai','chain'];
-        const isFlowQuery = _FLOW_KW.some(kw => query.includes(kw));
-
-        // walk full DATA tree recursively
-        const entries = [];
-        for (const [brand, brandData] of Object.entries(DATA)) {
-          if (brand === 'meta') continue;
-          // if brand filter specified, skip other brands entirely
-          if (brandFilter && brand !== brandFilter) continue;
-          for (const [team, teamData] of Object.entries(brandData)) {
-            // if team filter specified, skip other teams
-            if (teamFilter && team.toLowerCase() !== teamFilter) continue;
-            _walkData(teamData, [brand, team], entries);
-          }
+      const _entries = [];
+      for (const [brand, brandData] of Object.entries(DATA)) {
+        if (brand === 'meta') continue;
+        if (brandFilter && brand !== brandFilter) continue;
+        for (const [team, teamData] of Object.entries(brandData)) {
+          if (teamFilter && team.toLowerCase() !== teamFilter) continue;
+          _walkData(teamData, [brand, team], _entries);
         }
+      }
 
-        entries.forEach(({ blocks, path }) => {
-          const [brand, team, ...rest] = path;
-          const sectionLabel = rest.join(' › ') || '—';
+      // Inject Dashboard Growth "All Brand" data terstruktur (per-brand blocks)
+      if (typeof getDashboardContextBlocks === 'function') {
+        _entries.push({ blocks: getDashboardContextBlocks(), path: ['All Brand', 'Dashboard Growth'] });
+      } else if (typeof DASHBOARD_BLOCKS !== 'undefined') {
+        // fallback ke DASHBOARD_BLOCKS jika dashboard_context.js belum ada
+        _entries.push({ blocks: DASHBOARD_BLOCKS, path: ['All Brand', 'Dashboard Growth'] });
+      }
+      const _scored = [];
+      _entries.forEach(({ blocks, path }) => {
+        blocks.forEach(blk => {
+          const plain = _blockText(blk);
+          if (plain.length < 10) return;
+          let score = 0;
+          if (plain.includes(query)) score += 12;
+          keywords.forEach(kw => { if (plain.includes(kw)) score += 2; });
+          if (score > 0) _scored.push({ plain, path, score });
+        });
+      });
+      _scored.sort((a,b) => b.score - a.score);
+      const ctxSnippets = _scored.slice(0,8).map(r =>
+        `[${r.path.join(' › ')}]\n${r.plain.slice(0,1200)}`
+      ).join('\n\n---\n\n');
 
-          blocks.forEach(blk => {
-            const plain = _blockText(blk);
-            if (plain.length < 8) return;
+      // Dashboard context selalu disertakan — tidak bergantung scoring keyword
+      const dashboardCtx = (typeof getDashboardContextText === 'function')
+        ? getDashboardContextText()
+        : '';
 
-            let score = 0;
+      const sysPrompt = `Kamu adalah AI Assistant internal Growth Ops Analytics Hub (brand: RATA, TANAM, VINIR).
 
-            // exact full phrase — big bonus
-            if (plain.includes(query)) score += 12;
+Cara menjawab:
+- Pertanyaan tentang angka/KPI/metrik → gunakan DATA DASHBOARD, sebutkan angkanya langsung
+- Pertanyaan tentang panduan, SOP, prosedur tim → gunakan KONTEKS DOKUMENTASI
+- Pertanyaan gabungan → kombinasikan keduanya
+- Jangan pernah suruh user cek sheet sendiri jika datanya sudah tersedia di sini
+- Gunakan bahasa Indonesia. Format **bold** untuk highlight penting.
 
-            keywords.forEach(kw => {
-              if (!plain.includes(kw)) return;
-              score += 2;
-              // extra: keyword in metric title / h3
-              const titleText = (blk.text || '').toLowerCase();
-              const h3m = (blk.html || '').match(/<h3[^>]*>([^<]*)<\/h3>/i);
-              if (titleText.includes(kw) || (h3m && h3m[1].toLowerCase().includes(kw))) score += 4;
-              // table rows get a small boost (likely metric definitions)
-              if (blk.type === 'table') score += 1;
-            });
+KEMAMPUAN CHART: Jika user minta chart/grafik, generate menggunakan format ini persis (JANGAN tambahkan var/const untuk chart instance):
+\`\`\`html
+<div id="mychart" style="height:250px;width:100%;"></div>
+<script>echarts.init(document.getElementById('mychart')).setOption({tooltip:{trigger:'axis'},xAxis:{type:'category',data:['W1','W2','W3','W4']},yAxis:{type:'value'},series:[{type:'bar',data:[265,195,0,0],name:'Booking'}]});<\/script>
+\`\`\`
+Penting: gunakan pola echarts.init(...).setOption({...}) langsung, jangan pakai variabel perantara. Library echarts sudah tersedia. Gunakan data dari DATA DASHBOARD.
 
-            // flow intent boost — surface Data & Pipeline and Data Lineage sections
-            if (isFlowQuery) {
-              const pathStr = path.join(' ').toLowerCase();
-              if (pathStr.includes('data') || pathStr.includes('pipeline') || pathStr.includes('lineage') || pathStr.includes('flow') || pathStr.includes('source')) score += 8;
-              if (blk.type === 'diagram') score += 6;
-              if (blk.type === 'steps') score += 4;
-            }
+=== DATA DASHBOARD GROWTH ===
+${dashboardCtx}
 
-            if (score > 0) {
-              const dedupeKey = brand + '|' + plain.slice(0, 100);
-              if (!results.some(r => r._key === dedupeKey)) {
-                results.push({ brand, team, section: sectionLabel, blk, score, _key: dedupeKey });
-              }
-            }
-          });
+=== KONTEKS DOKUMENTASI TIM ===
+${ctxSnippets || 'Tidak ada konteks dokumentasi ditemukan untuk pertanyaan ini.'}`.trim();
+
+      // ── Panggil DeepSeek langsung dari browser (no backend) ──────────────
+      try {
+        const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + apiKey
+          },
+          body: JSON.stringify({
+            model: 'deepseek-chat',
+            messages: [
+              { role: 'system', content: sysPrompt },
+              { role: 'user', content: rawQuery }
+            ],
+            max_tokens: 2048,
+            temperature: 0.4
+          })
         });
 
-        // also search DASHBOARD_BLOCKS live data
-        if (typeof DASHBOARD_BLOCKS !== 'undefined') {
-          DASHBOARD_BLOCKS.forEach(blk => {
-            let plain = '';
-            if (blk.html) plain = _strip(blk.html).toLowerCase();
-            if (blk.type === 'metrics' && blk.data) plain = blk.data.map(m => m.label + ' ' + m.value).join(' ').toLowerCase();
-            if (plain.length < 5) return;
-            let score = 0;
-            keywords.forEach(kw => { if (plain.includes(kw)) score += 3; });
-            if (plain.includes(query)) score += 10;
-            if (score > 0) {
-              let renderHtml = blk.html;
-              if (blk.type === 'metrics' && blk.data) {
-                renderHtml = '<ul style="margin-left:18px;font-size:13px;">' + blk.data.map(m => `<li style="margin-bottom:3px;"><strong>${m.label}:</strong> <span style="color:var(--t1)">${m.value}</span></li>`).join('') + '</ul>';
-              }
-              if (renderHtml && !results.some(r => r._key === plain.slice(0, 120))) {
-                results.push({ brand: 'ALL', team: 'Dashboard Growth', section: 'Data Aktual', blk: { type: 'text', html: renderHtml }, score: score + 1, _key: plain.slice(0, 120) });
-              }
-            }
-          });
+        if (!response.ok) {
+          const errData = await response.json().catch(() => ({}));
+          throw new Error(errData.error?.message || `HTTP ${response.status}`);
         }
 
-        results.sort((a, b) => b.score - a.score);
+        const data = await response.json();
+        let raw = data.choices?.[0]?.message?.content || 'Maaf, tidak ada jawaban tersedia.';
+        aiMsg.querySelector('.ai-content').innerHTML = window._renderAIResponse(raw);
+        setTimeout(window._execPendingCharts, 80);
 
-        let responseText = '';
-        if (results.length > 0) {
-          const top = results.slice(0, 3);
-          responseText = `<p style="margin-bottom:12px;font-weight:600;font-size:13px;">Ditemukan ${results.length} hasil — menampilkan paling relevan:</p>`;
-          top.forEach(r => {
-            const rendered = _renderBlk(r.blk);
-            if (!rendered) return;
-            // replace var(--act) with actual brand hex so color shows correctly in chat
-            const brandHex = COLORS[r.brand] || '#475569';
-            const colorized = rendered.replace(/var\(--act\)/g, brandHex);
-            const tagLabel = r.brand + (r.team ? ' › ' + r.team : '') + (r.section && r.section !== '—' ? ' › ' + r.section : '');
-            const isLight = document.body.classList.contains('light-theme');
-            const borderCol = isLight ? 'rgba(15,23,42,0.08)' : 'rgba(255,255,255,.1)';
-            const bgBlk = isLight ? 'rgba(15,23,42,0.02)' : 'rgba(255,255,255,.04)';
-            const bgHeader = isLight ? 'rgba(15,23,42,0.04)' : 'rgba(255,255,255,.06)';
-            const textCol = isLight ? '#64748b' : '#94a3b8';
-            responseText += `
-              <div style="border:1px solid ${borderCol};border-radius:12px;margin-bottom:10px;overflow:hidden;background:${bgBlk};">
-                <div style="padding:7px 14px;background:${bgHeader};display:flex;align-items:center;gap:8px;border-bottom:1px solid ${borderCol};">
-                  <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:${brandHex};flex-shrink:0"></span>
-                  <span style="font-size:10px;font-weight:700;color:${textCol};letter-spacing:.05em;text-transform:uppercase">${tagLabel}</span>
-                </div>
-                <div style="padding:12px 16px;font-size:13.5px;">${colorized}</div>
-              </div>`;
-          });
-          if (isFlowQuery && results.length > 0) {
-            responseText = `<p style="margin-bottom:10px;font-size:12px;color:#94a3b8;font-weight:600;">🔍 Mode: Data Flow Trace — ${results.length} hasil ditemukan</p>` + responseText;
-          } else if (results.length > 0) {
-            responseText = `<p style="margin-bottom:10px;font-size:12px;color:#94a3b8;font-weight:600;">Ditemukan ${results.length} hasil relevan:</p>` + responseText;
-          }
-        } else {
-          responseText = `<p style="color:#94a3b8;font-size:14px;line-height:1.6;">Tidak ditemukan hasil untuk <em>"${rawQuery}"</em>.<br><span style="font-size:12px;">Coba: <code>alur data chat</code> &middot; <code>sumber prospect rata</code> &middot; <code>dari mana booking tanam</code> &middot; <code>definisi buy</code></span></p>`;
-        }
+      } catch (error) {
+        console.error('DeepSeek error:', error);
+        aiMsg.querySelector('.ai-content').innerHTML = `
+          <p style="color:#f43f5e;font-weight:600;">⚠️ Gagal menghubungi DeepSeek API</p>
+          <p style="color:#94a3b8;font-size:12px;margin-top:6px;">Error: ${error.message}</p>
+          <p style="color:#94a3b8;font-size:11px;margin-top:4px;">Pastikan koneksi internet aktif.</p>`;
+      }
 
-        aiMsg.querySelector('.ai-content').innerHTML = responseText;
-        setTimeout(() => {
-          const historyEl = document.getElementById('chat-history');
-          historyEl.scrollTo({ top: historyEl.scrollHeight, behavior: 'smooth' });
-        }, 80);
-      }, 380);
+      // Scroll to bottom
+      setTimeout(() => {
+        const historyEl = document.getElementById('chat-history');
+        historyEl.scrollTo({ top: historyEl.scrollHeight, behavior: 'smooth' });
+      }, 80);
     };
 
     document.getElementById('ai-input').addEventListener('keydown', function(e) {
