@@ -3276,31 +3276,25 @@
 
     // ── Render response AI — support teks + HTML/ECharts code block ─────────
     window._renderAIResponse = function(raw) {
-      var htmlBlock = raw.match(/```html\s*([\s\S]*?)```/i);
-      if (htmlBlock) {
-        var beforeCode = raw.slice(0, raw.indexOf('```html')).trim();
-        var afterCode  = raw.slice(raw.indexOf('```html') + htmlBlock[0].length).trim();
-        var chartId = 'ai-chart-' + Date.now();
-        var blockContent = htmlBlock[1];
+      // Ganti SEMUA ```html ... ``` block (global)
+      var hasChart = false;
+      var result = raw.replace(/```html\s*([\s\S]*?)```/gi, function(_, blockContent) {
+        hasChart = true;
+        var chartId = 'ai-chart-' + Date.now() + '-' + Math.random().toString(36).slice(2,5);
 
-        // Ekstrak script
         var scriptMatch = blockContent.match(/<script[^>]*>([\s\S]*?)<\/script>/i);
         var divOnly = blockContent.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '').trim();
 
-        // Cari id asli yang dipakai AI di div-nya
         var origIdMatch = divOnly.match(/id=["']([^'"]+)['"]/);
         var origId = origIdMatch ? origIdMatch[1] : 'mychart';
 
-        // Ganti origId → chartId unik di div
         divOnly = divOnly.replace(new RegExp('id=["\']' + origId + '["\']', 'g'), 'id="' + chartId + '"');
 
-        // Ganti origId → chartId di script, lalu wrap dalam IIFE untuk isolasi scope
         var scriptCode = '';
         if (scriptMatch) {
           var sc = scriptMatch[1]
             .replace(new RegExp("(['\"])" + origId + "\\1", 'g'), '"' + chartId + '"')
             .replace(/document\.getElementById\(['"][^'"]*['"]\)/g, 'document.getElementById("' + chartId + '")');
-          // Inject background transparent + label color ke semua setOption calls
           sc = sc.replace(/\.setOption\s*\(\s*\{/, '.setOption({backgroundColor:"transparent",textStyle:{color:"#94a3b8"},');
           scriptCode = '(function(){\n' + sc + '\n})();';
         }
@@ -3308,18 +3302,14 @@
         window._pendingChartScripts = window._pendingChartScripts || {};
         window._pendingChartScripts[chartId] = scriptCode;
 
-        var beforeRendered = beforeCode ? window._mdToHtml(beforeCode) : '';
-        var afterRendered  = afterCode  ? window._mdToHtml(afterCode)  : '';
-
-        return (beforeRendered ? beforeRendered + '<br>' : '') +
-          '<div style="background:var(--b2);border:1px solid var(--sep);border-radius:10px;overflow:hidden;margin:8px 0;">' +
-            '<div style="font-size:10px;color:var(--t3);padding:6px 12px;border-bottom:1px solid var(--sep);">📊 Chart — dari AI</div>' +
-            '<div style="padding:8px 4px;">' + divOnly + '</div>' +
+        return '<div style="background:var(--b2);border:1px solid var(--sep);border-radius:10px;overflow:hidden;margin:8px 0;">' +
+          '<div style="font-size:10px;color:var(--t3);padding:6px 12px;border-bottom:1px solid var(--sep);">📊 Chart — dari AI</div>' +
+          '<div style="padding:8px 4px;">' + divOnly + '</div>' +
           '</div>' +
-          (afterRendered ? '<br>' + afterRendered : '') +
           '<span data-chart-id="' + chartId + '" style="display:none;"></span>';
-      }
-      return window._mdToHtml(raw);
+      });
+
+      return window._mdToHtml(result);
     };
 
     window._execPendingCharts = function() {
