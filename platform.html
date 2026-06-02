@@ -3489,14 +3489,15 @@
       }, 50);
     };
 
-    // Ambil API key dari localStorage, minta input jika belum ada
+    // Split key — separuh di kode, separuh dari user input
+    const _KP = 'sk-c6eab6a625c040f7';
     function _getApiKey() {
       var k = localStorage.getItem('goh_dskey');
       if (!k) {
-        k = prompt('Masukkan DeepSeek API Key untuk mengaktifkan AI Assistant:\n(Akan disimpan di browser ini)');
+        k = prompt('Masukkan kode akses AI (16 karakter):\n(Akan disimpan di browser ini)');
         if (k && k.trim()) localStorage.setItem('goh_dskey', k.trim());
       }
-      return k ? k.trim() : null;
+      return k ? (_KP + k.trim()) : null;
     }
 
     window.askAI = async function () {
