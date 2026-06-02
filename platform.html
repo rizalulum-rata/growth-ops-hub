@@ -3306,6 +3306,23 @@
     };
 
     window._mdToHtml = function(txt) {
+      // Parse mermaid code blocks
+      txt = txt.replace(/```mermaid\s*([\s\S]*?)```/gi, function(_, code) {
+        var id = 'mmd-' + Date.now() + '-' + Math.random().toString(36).slice(2,6);
+        var cleanCode = code.trim();
+        setTimeout(function() {
+          var el = document.getElementById(id);
+          if (el && typeof mermaid !== 'undefined') {
+            mermaid.render(id + '-svg', cleanCode).then(function(r) {
+              el.innerHTML = r.svg;
+            }).catch(function(e) {
+              el.innerHTML = '<pre style="font-size:11px;color:var(--t3);">' + cleanCode + '</pre>';
+            });
+          }
+        }, 80);
+        return '<div id="' + id + '" style="background:var(--b3);border:1px solid var(--sep);border-radius:8px;padding:12px;margin:8px 0;overflow-x:auto;"><span style="font-size:10px;color:var(--t3);">Memuat diagram...</span></div>';
+      });
+
       // Parse markdown tables dulu sebelum replace lainnya
       txt = txt.replace(/(\|[^\n]+\|\n)((?:\|[-:| ]+\|\n))(\|[^\n]+\|\n?)+/g, function(match) {
         var lines = match.trim().split('\n').filter(function(l){ return l.trim(); });
