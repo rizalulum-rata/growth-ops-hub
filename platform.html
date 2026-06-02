@@ -2840,12 +2840,47 @@
 
     // ── NAV ────────────────────────────────────────────────────────────
     function toggleBrand(brand, btn) {
+      if (brand === 'goa' && sessionStorage.getItem('goa_access') !== '1') {
+        _showGoaLock(btn); return;
+      }
       const el = document.getElementById('b-' + brand);
       const was = el.classList.contains('open');
       document.querySelectorAll('.bi').forEach(b => { b.classList.remove('open'); b.querySelector('.bb').classList.remove('open'); });
-      if (!was) {
-        el.classList.add('open'); btn.classList.add('open');
-        // background stays solid — no gradient injection
+      if (!was) { el.classList.add('open'); btn.classList.add('open'); }
+    }
+
+    function _showGoaLock(btn) {
+      const main = document.getElementById('content');
+      main.innerHTML = `
+        <div class="content-inner">
+          <div class="phead"><div class="phead-bc" style="color:var(--goa)">GROWTH OPS ANALYTICS</div><h1>Area Terbatas</h1></div>
+          <div class="goa-lock" id="goa-access-box">
+            <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="url(#ga-grad)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:20px;filter:drop-shadow(0 6px 14px rgba(168,85,247,0.35))">
+              <defs><linearGradient id="ga-grad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#a855f7"/><stop offset="100%" stop-color="#7e22ce"/></linearGradient></defs>
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            <div style="font-size:22px;font-weight:700;margin-bottom:6px;color:var(--t1)">Growth Ops Analytics</div>
+            <div style="color:var(--t2);margin-bottom:28px;text-align:center;max-width:300px;line-height:1.5;font-size:13px;">Masukkan password untuk mengakses section ini.</div>
+            <input class="goa-input" id="goa-access-pwd" type="password" placeholder="Password" maxlength="40"
+              onkeydown="if(event.key==='Enter') _checkGoaAccess()">
+            <button class="goa-btn" onclick="_checkGoaAccess()">Masuk</button>
+          </div>
+        </div>`;
+      setTimeout(() => document.getElementById('goa-access-pwd')?.focus(), 80);
+      window._goaAccessBtn = btn;
+    }
+
+    async function _checkGoaAccess() {
+      const input = document.getElementById('goa-access-pwd');
+      const box = document.getElementById('goa-access-box');
+      const hash = await hashPassword(input.value);
+      if (hash === '33f930414f2ea5a1f1adf94ff15cc899e32eb5249d9a0429d5939ae603d4778d') {
+        sessionStorage.setItem('goa_access', '1');
+        document.getElementById('content').innerHTML = '';
+        toggleBrand('goa', window._goaAccessBtn);
+      } else {
+        box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake');
+        input.value = ''; input.placeholder = 'Password salah...';
       }
     }
 
