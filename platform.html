@@ -1644,14 +1644,25 @@
 
     .welcome > * { position: relative; z-index: 1; }
 
-    /* ── BOTANICAL GROWTH DECORATION ──────────────────────────── */
+    /* ── BOTANICAL INTRO ANIMATION ────────────────────────────── */
+    /* Plant grows from bottom → branches → leaves bloom → fades out */
     @keyframes vineGrow {
-      from { stroke-dashoffset: var(--vine-len, 2200); }
+      from { stroke-dashoffset: var(--vine-len, 600); }
       to   { stroke-dashoffset: 0; }
     }
-    @keyframes leafReveal {
-      from { opacity: 0; }
-      to   { opacity: 1; }
+    @keyframes leafBloom {
+      0%   { transform: scale(0); opacity: 0; }
+      65%  { transform: scale(1.18); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes budPop {
+      0%   { transform: scale(0); opacity: 0; }
+      70%  { transform: scale(1.4); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes botanicalOut {
+      from { opacity: 1; }
+      to   { opacity: 0; }
     }
 
     .welcome-botanical {
@@ -1662,70 +1673,69 @@
       pointer-events: none;
       z-index: 0 !important;
       overflow: visible;
+      /* Whole plant fades out after it finishes growing */
+      animation: botanicalOut 1.0s ease-in 3.2s forwards;
     }
 
-    .welcome-botanical .vine-line {
+    /* Main trunk — thicker, grows from bottom */
+    .welcome-botanical .vine-stem {
       fill: none;
       stroke: var(--botanical-stroke);
-      stroke-width: 1.4;
+      stroke-width: 1.8;
       stroke-linecap: round;
-      stroke-dasharray: 2200;
-      stroke-dashoffset: 2200;
-      animation: vineGrow 3.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) var(--delay, 0s) forwards;
+      stroke-linejoin: round;
+      stroke-dasharray: 620;
+      stroke-dashoffset: 620;
+      animation: vineGrow 1.85s cubic-bezier(0.45, 0.05, 0.55, 0.95) 0s forwards;
     }
 
-    .welcome-botanical .vine-secondary {
-      stroke-width: 1;
-      opacity: 0.45;
-      stroke-dasharray: 1300;
-      stroke-dashoffset: 1300;
-      animation-duration: 2.8s;
-    }
-
+    /* Primary branches off the trunk */
     .welcome-botanical .vine-branch {
       fill: none;
       stroke: var(--botanical-stroke);
-      stroke-width: 1;
+      stroke-width: 1.1;
       stroke-linecap: round;
-      stroke-dasharray: 500;
-      stroke-dashoffset: 500;
-      animation: vineGrow 1.6s ease-out var(--delay, 1s) forwards;
+      stroke-dasharray: 280;
+      stroke-dashoffset: 280;
+      animation: vineGrow 0.95s ease-out var(--delay, 0.6s) forwards;
     }
 
-    .welcome-botanical .vine-tiny {
-      stroke-dasharray: 220;
-      stroke-dashoffset: 220;
-      animation-duration: 1s;
+    /* Secondary sub-branches */
+    .welcome-botanical .vine-sub {
+      stroke-width: 0.85;
+      stroke-dasharray: 200;
+      stroke-dashoffset: 200;
+      animation-duration: 0.65s;
     }
 
+    /* Short top-split branches */
+    .welcome-botanical .vine-top {
+      stroke-width: 0.85;
+      stroke-dasharray: 160;
+      stroke-dashoffset: 160;
+      animation-duration: 0.55s;
+    }
+
+    /* Leaves — bloom with spring overshoot */
     .welcome-botanical .vine-leaf {
       fill: var(--botanical-fill);
       stroke: var(--botanical-stroke);
-      stroke-width: 0.8;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      opacity: 0;
-      animation: leafReveal 0.5s ease-out var(--delay, 1.8s) forwards;
+      stroke-width: 0.7;
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: leafBloom 0.72s cubic-bezier(0.34, 1.56, 0.64, 1) var(--delay, 1.8s) both;
     }
 
+    /* Junction dots — pop before each branch grows */
     .welcome-botanical .vine-bud {
       fill: var(--botanical-stroke);
-      opacity: 0;
-      animation: leafReveal 0.4s ease-out var(--delay, 1.0s) forwards;
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: budPop 0.38s cubic-bezier(0.34, 1.56, 0.64, 1) var(--delay, 0.6s) both;
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .welcome-botanical .vine-line,
-      .welcome-botanical .vine-branch,
-      .welcome-botanical .vine-tiny {
-        animation: none;
-        stroke-dashoffset: 0;
-      }
-      .welcome-botanical .vine-leaf,
-      .welcome-botanical .vine-bud {
-        animation: none;
-        opacity: 1;
-      }
+      .welcome-botanical { display: none; }
     }
 
     /* Large editorial title */
@@ -2479,50 +2489,63 @@
       <!-- Welcome Screen -->
       <div class="welcome">
 
-        <!-- Botanical growth decoration (background SVG) -->
+        <!-- Botanical intro animation: grows up from bottom, then fades out -->
         <svg class="welcome-botanical" viewBox="0 0 1120 520" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
-          <!-- Secondary faint vine: bottom-right to mid-left -->
-          <path class="vine-line vine-secondary" style="--delay:0.1s"
-            d="M 1145,510 C 1060,470 990,410 910,375 C 848,345 790,318 738,308"/>
-          <!-- Main vine: bottom-left curving up to top-right -->
-          <path class="vine-line" style="--delay:0.35s"
-            d="M -15,440 C 70,408 155,368 258,330 C 368,290 476,252 578,208 C 678,166 790,130 910,108 C 988,94 1058,82 1145,68"/>
-          <!-- Branch A off main vine at (258,330) → upper-left -->
-          <path class="vine-branch" style="--delay:1.05s"
-            d="M 258,330 C 246,302 240,272 234,242"/>
-          <!-- Leaf A tip -->
-          <path class="vine-leaf" style="--delay:1.65s"
-            d="M 232,240 C 222,226 208,222 213,236 C 216,246 228,250 232,240 Z"/>
-          <!-- Tiny counter-branch off A at (248,282) → right -->
-          <path class="vine-branch vine-tiny" style="--delay:1.25s"
-            d="M 248,284 C 260,278 274,282 284,292"/>
-          <!-- Leaf tiny branch -->
-          <path class="vine-leaf" style="--delay:1.85s"
-            d="M 285,293 C 295,298 304,292 298,283 C 294,277 284,278 285,293 Z"/>
-          <!-- Branch B off main vine at (578,208) → upward -->
-          <path class="vine-branch" style="--delay:1.3s"
-            d="M 578,208 C 570,182 572,154 582,130"/>
-          <!-- Leaf B tip -->
-          <path class="vine-leaf" style="--delay:1.9s"
-            d="M 583,128 C 578,112 563,106 567,120 C 570,130 581,134 583,128 Z"/>
-          <!-- Branch B2 off B at (576,168) → left -->
-          <path class="vine-branch vine-tiny" style="--delay:1.45s"
-            d="M 576,168 C 562,162 548,166 538,176"/>
-          <!-- Leaf B2 -->
-          <path class="vine-leaf" style="--delay:2.0s"
-            d="M 537,177 C 527,185 526,196 536,192 C 543,189 547,180 537,177 Z"/>
-          <!-- Branch C off main vine at (910,108) → upper-right -->
-          <path class="vine-branch" style="--delay:1.55s"
-            d="M 910,108 C 922,86 940,70 960,60"/>
-          <!-- Leaf C tip -->
-          <path class="vine-leaf" style="--delay:2.15s"
-            d="M 961,58 C 958,42 944,36 947,50 C 949,60 959,63 961,58 Z"/>
-          <!-- Junction buds -->
-          <circle class="vine-bud" cx="258" cy="330" r="2.8" style="--delay:1.05s"/>
-          <circle class="vine-bud" cx="248" cy="284" r="2" style="--delay:1.25s"/>
-          <circle class="vine-bud" cx="578" cy="208" r="2.8" style="--delay:1.3s"/>
-          <circle class="vine-bud" cx="576" cy="168" r="2" style="--delay:1.45s"/>
-          <circle class="vine-bud" cx="910" cy="108" r="2.8" style="--delay:1.55s"/>
+
+          <!-- ══ MAIN TRUNK ══ grows bottom (760,520) → top (760,58) -->
+          <path class="vine-stem"
+            d="M 760,522 C 758,464 756,400 759,334 C 762,270 764,205 760,150 C 758,116 757,88 760,58"/>
+
+          <!-- ══ BRANCHES ══ each sprouts as trunk passes that height -->
+
+          <!-- Branch L1: from trunk at y≈334 → extends left-down -->
+          <path class="vine-branch" style="--delay:0.60s"
+            d="M 759,334 C 732,316 706,302 676,296"/>
+          <!-- Sub off L1: from (710,300) → lower-left (drooping leaf) -->
+          <path class="vine-branch vine-sub" style="--delay:1.20s"
+            d="M 710,300 C 698,314 688,326 674,334"/>
+
+          <!-- Branch R1: from trunk at y≈244 → extends right -->
+          <path class="vine-branch" style="--delay:1.00s"
+            d="M 762,244 C 792,228 822,218 854,216"/>
+          <!-- Sub off R1: from (824,218) → upper-right (reaching up) -->
+          <path class="vine-branch vine-sub" style="--delay:1.58s"
+            d="M 824,218 C 836,204 844,192 848,178"/>
+
+          <!-- Branch L2: from trunk at y≈167 → left, shorter -->
+          <path class="vine-branch" style="--delay:1.22s"
+            d="M 760,167 C 736,150 714,142 692,140"/>
+
+          <!-- Branch R2: from trunk at y≈115 → right, short -->
+          <path class="vine-branch" style="--delay:1.40s"
+            d="M 759,115 C 776,102 794,94 814,92"/>
+
+          <!-- Top split L: from trunk at y≈80 → upper-left (like seedling opening) -->
+          <path class="vine-branch vine-top" style="--delay:1.52s"
+            d="M 760,82 C 746,70 733,63 720,59"/>
+          <!-- Top split R: mirror right -->
+          <path class="vine-branch vine-top" style="--delay:1.52s"
+            d="M 760,82 C 774,70 787,63 800,59"/>
+
+          <!-- ══ LEAVES ══ bloom (scale 0→1) after branch reaches tip -->
+
+          <ellipse class="vine-leaf" style="--delay:1.60s" cx="676" cy="296" rx="20" ry="10" transform="rotate(-16 676 296)"/>
+          <ellipse class="vine-leaf" style="--delay:1.85s" cx="673" cy="335" rx="16" ry="8"  transform="rotate(24 673 335)"/>
+          <ellipse class="vine-leaf" style="--delay:1.97s" cx="854" cy="216" rx="21" ry="10" transform="rotate(13 854 216)"/>
+          <ellipse class="vine-leaf" style="--delay:2.25s" cx="849" cy="177" rx="16" ry="8"  transform="rotate(-7 849 177)"/>
+          <ellipse class="vine-leaf" style="--delay:2.24s" cx="692" cy="140" rx="19" ry="9"  transform="rotate(-23 692 140)"/>
+          <ellipse class="vine-leaf" style="--delay:2.42s" cx="815" cy="92"  rx="16" ry="8"  transform="rotate(17 815 92)"/>
+          <ellipse class="vine-leaf" style="--delay:2.10s" cx="720" cy="59"  rx="16" ry="9"  transform="rotate(-36 720 59)"/>
+          <ellipse class="vine-leaf" style="--delay:2.10s" cx="801" cy="59"  rx="16" ry="9"  transform="rotate(30 801 59)"/>
+
+          <!-- ══ JUNCTION BUDS ══ pop just before each branch starts -->
+          <circle class="vine-bud" cx="759" cy="334" r="3.2" style="--delay:0.56s"/>
+          <circle class="vine-bud" cx="762" cy="244" r="3.2" style="--delay:0.96s"/>
+          <circle class="vine-bud" cx="760" cy="167" r="2.8" style="--delay:1.18s"/>
+          <circle class="vine-bud" cx="759" cy="115" r="2.8" style="--delay:1.36s"/>
+          <circle class="vine-bud" cx="760" cy="82"  r="3.0" style="--delay:1.48s"/>
+          <circle class="vine-bud" cx="710" cy="300" r="2.2" style="--delay:1.18s"/>
+          <circle class="vine-bud" cx="824" cy="218" r="2.2" style="--delay:1.56s"/>
         </svg>
 
         <!-- Title -->
