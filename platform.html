@@ -22,6 +22,8 @@
       --t3: #71717a;
       --rata: #f43f5e;
       --rata-glow: rgba(244, 63, 94, 0.04);
+      --botanical-stroke: rgba(52, 211, 153, 0.18);
+      --botanical-fill: rgba(52, 211, 153, 0.10);
       --tanam: #10b981;
       --tanam-glow: rgba(16, 185, 129, 0.03);
       --vinir: #3b82f6;
@@ -63,8 +65,10 @@
       --vinir-glow: rgba(59, 130, 246, 0.02);
       --allbrand-glow: rgba(138, 153, 173, 0.01);
       --goa-glow: rgba(168, 85, 247, 0.02);
-      --act-glow: rgba(59, 130, 246, 0.02);
-      --acbg: rgba(59, 130, 246, 0.04);
+      --act-glow: transparent;
+      --acbg: rgba(0, 0, 0, 0.04);
+      --botanical-stroke: rgba(16, 185, 129, 0.14);
+      --botanical-fill: rgba(16, 185, 129, 0.07);
     }
 
     * {
@@ -287,7 +291,7 @@
     body.light-theme .sw-wrap:focus-within {
       background: rgba(15, 23, 42, 0.06);
       border-color: var(--act);
-      box-shadow: 0 0 12px var(--act-glow);
+      box-shadow: none;
     }
 
     body.light-theme .bb:hover {
@@ -532,13 +536,16 @@
     }
 
     .arr {
-      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       color: var(--t3);
-      transition: transform 0.2s;
+      transform: rotate(-90deg);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s;
     }
 
     .bi.open .bb .arr {
-      transform: rotate(90deg);
+      transform: rotate(0deg);
       color: var(--t1);
     }
 
@@ -1608,104 +1615,183 @@
       color: var(--t1);
     }
 
+    /* ── WELCOME HERO ────────────────────────────────────────────────── */
     .welcome {
       position: relative;
-      background: rgba(24, 24, 27, 0.9);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 28px;
-      padding: 64px 48px;
-      text-align: center;
-      max-width: 860px;
-      margin: 40px auto;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 72px 0 56px;
+      text-align: left;
+      max-width: 1120px;
+      margin: 0 auto;
+      /* no box, no border, no shadow — sits flat on the page */
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      backdrop-filter: none;
+      overflow: visible;
+      display: block;
     }
 
     body.light-theme .welcome {
-      background: rgba(255, 255, 255, 0.85);
-      border-color: rgba(9, 9, 11, 0.06);
-      box-shadow: 0 30px 60px rgba(15, 23, 42, 0.06);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      backdrop-filter: none;
     }
 
-    /* Moving High-Tech Grid Pattern in Background */
-    .welcome::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: 
-        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-      background-size: 20px 20px;
-      background-position: center;
-      mask-image: radial-gradient(circle, black 40%, transparent 80%);
-      -webkit-mask-image: radial-gradient(circle, black 40%, transparent 80%);
+    /* No ::after glow */
+    .welcome::after { display: none; }
+
+    .welcome > * { position: relative; z-index: 1; }
+
+    /* ── BOTANICAL GROWTH DECORATION ──────────────────────────── */
+    @keyframes vineGrow {
+      from { stroke-dashoffset: var(--vine-len, 2200); }
+      to   { stroke-dashoffset: 0; }
+    }
+    @keyframes leafReveal {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .welcome-botanical {
+      position: absolute !important;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
-      z-index: 0;
-      opacity: 0.6;
-      animation: gridScroll 20s linear infinite;
+      z-index: 0 !important;
+      overflow: visible;
     }
 
-    body.light-theme .welcome::before {
-      background-image: 
-        linear-gradient(rgba(15, 23, 42, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
-      opacity: 0.8;
+    .welcome-botanical .vine-line {
+      fill: none;
+      stroke: var(--botanical-stroke);
+      stroke-width: 1.4;
+      stroke-linecap: round;
+      stroke-dasharray: 2200;
+      stroke-dashoffset: 2200;
+      animation: vineGrow 3.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) var(--delay, 0s) forwards;
     }
 
-    @keyframes gridScroll {
-      0% { background-position: 0 0; }
-      100% { background-position: 0 400px; }
+    .welcome-botanical .vine-secondary {
+      stroke-width: 1;
+      opacity: 0.45;
+      stroke-dasharray: 1300;
+      stroke-dashoffset: 1300;
+      animation-duration: 2.8s;
     }
 
-    /* Ambient Pulsing Tech Glow fluid water wave */
-    .welcome::after {
-      content: '';
-      position: absolute;
-      width: 140%;
-      height: 140%;
-      background: radial-gradient(circle at 50% 90px, rgba(244, 63, 94, 0.22) 0%, transparent 60%);
-      top: 50%;
-      left: 50%;
-      pointer-events: none;
-      z-index: 0;
-      transform: translate(-50%, -50%);
-      border-radius: 43% 45% 40% 42% / 40% 40% 45% 45%;
-      animation: fluidWave 15s linear infinite,
-                 hueShift 15s linear infinite;
+    .welcome-botanical .vine-branch {
+      fill: none;
+      stroke: var(--botanical-stroke);
+      stroke-width: 1;
+      stroke-linecap: round;
+      stroke-dasharray: 500;
+      stroke-dashoffset: 500;
+      animation: vineGrow 1.6s ease-out var(--delay, 1s) forwards;
     }
 
-    @keyframes fluidWave {
-      0% {
-        transform: translate(-50%, -50%) rotate(0deg) scale(0.95);
-        border-radius: 43% 45% 40% 42% / 40% 40% 45% 45%;
+    .welcome-botanical .vine-tiny {
+      stroke-dasharray: 220;
+      stroke-dashoffset: 220;
+      animation-duration: 1s;
+    }
+
+    .welcome-botanical .vine-leaf {
+      fill: var(--botanical-fill);
+      stroke: var(--botanical-stroke);
+      stroke-width: 0.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0;
+      animation: leafReveal 0.5s ease-out var(--delay, 1.8s) forwards;
+    }
+
+    .welcome-botanical .vine-bud {
+      fill: var(--botanical-stroke);
+      opacity: 0;
+      animation: leafReveal 0.4s ease-out var(--delay, 1.0s) forwards;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .welcome-botanical .vine-line,
+      .welcome-botanical .vine-branch,
+      .welcome-botanical .vine-tiny {
+        animation: none;
+        stroke-dashoffset: 0;
       }
-      50% {
-        transform: translate(-50%, -50%) rotate(180deg) scale(1.05);
-        border-radius: 40% 42% 45% 43% / 45% 45% 40% 40%;
-      }
-      100% {
-        transform: translate(-50%, -50%) rotate(360deg) scale(0.95);
-        border-radius: 43% 45% 40% 42% / 40% 40% 45% 45%;
+      .welcome-botanical .vine-leaf,
+      .welcome-botanical .vine-bud {
+        animation: none;
+        opacity: 1;
       }
     }
 
-    @keyframes hueShift {
-      0% { filter: hue-rotate(0deg); }
-      100% { filter: hue-rotate(360deg); }
+    /* Large editorial title */
+    .w-title {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: clamp(40px, 6vw, 64px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--t1);
+      line-height: 1.1;
+      margin-bottom: 24px;
+      max-width: 100%;
+      background: none;
+      -webkit-background-clip: unset;
+      -webkit-text-fill-color: unset;
     }
 
+    .w-desc {
+      font-size: 14.5px;
+      color: var(--t2);
+      max-width: 560px;
+      margin-bottom: 36px;
+      line-height: 1.7;
+      white-space: normal;
+    }
 
+    /* Search bar */
+    .w-search {
+      max-width: 520px;
+      margin-bottom: 56px;
+    }
 
-    .welcome > * {
-      position: relative;
-      z-index: 1;
+    /* Stats divider row */
+    .w-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border-top: 1px solid var(--bor);
+      border-bottom: 1px solid var(--bor);
+      margin-top: 0;
+    }
+
+    .w-stat {
+      padding: 24px 28px;
+      border-right: 1px solid var(--bor);
+    }
+    .w-stat:last-child { border-right: none; }
+
+    .w-stat-num {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--t1);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .w-stat-num span {
+      color: var(--act);
+    }
+
+    .w-stat-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--t3);
+      letter-spacing: 0.02em;
     }
 
     /* Animated status badge */
@@ -1724,27 +1810,6 @@
       text-transform: uppercase;
       letter-spacing: 1px;
       margin-bottom: 20px;
-      animation: pulseBorder 2s infinite alternate;
-    }
-
-    @keyframes pulseBorder {
-      0% { border-color: rgba(16, 185, 129, 0.2); box-shadow: 0 0 0 rgba(16, 185, 129, 0); }
-      100% { border-color: rgba(16, 185, 129, 0.5); box-shadow: 0 0 12px rgba(16, 185, 129, 0.1); }
-    }
-
-    .w-badge::before {
-      content: '';
-      width: 6px;
-      height: 6px;
-      background: #10b981;
-      border-radius: 50%;
-      display: inline-block;
-      animation: blinkDot 1s infinite alternate;
-    }
-
-    @keyframes blinkDot {
-      0% { opacity: 0.3; }
-      100% { opacity: 1; transform: scale(1.2); }
     }
 
     .w-icon {
@@ -1765,7 +1830,7 @@
     .welcome:hover .w-icon {
       transform: scale(1.08) rotate(-5deg);
       border-color: var(--act);
-      box-shadow: 0 0 20px var(--act-glow);
+      box-shadow: none;
       background: rgba(30, 41, 59, 0.8);
     }
 
@@ -1825,7 +1890,7 @@
     .w-pill:hover {
       transform: translateY(-8px) scale(1.04) !important;
       border-color: var(--act);
-      box-shadow: 0 10px 25px var(--act-glow);
+      box-shadow: none;
       background: var(--bg);
       z-index: 10;
     }
@@ -2006,15 +2071,13 @@
 
     /* 5. Welcome staggered entrance */
     @keyframes welcomeIn {
-      from { opacity: 0; transform: translateY(14px); }
-      to   { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(24px) scale(0.98); filter: blur(4px); }
+      to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
     }
-    .w-icon   { animation: welcomeIn 0.4s ease-out 0.06s both; }
-    .w-title  { animation: welcomeIn 0.4s ease-out 0.12s both; }
-    .w-desc   { animation: welcomeIn 0.38s ease-out 0.18s both; }
-    .w-search { animation: welcomeIn 0.38s ease-out 0.25s both; }
-    .w-pills  { animation: welcomeIn 0.35s ease-out 0.32s both; }
-    .w-hint   { animation: welcomeIn 0.3s ease-out 0.42s both; }
+    .w-title  { animation: welcomeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both; }
+    .w-desc   { animation: welcomeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both; }
+    .chat-box { animation: welcomeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both; }
+    .w-cards  { animation: welcomeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both; }
 
     /* 6. Chatbot — Siri animated border */
     @property --siri-angle {
@@ -2065,41 +2128,136 @@
       gap: 10px;
     }
 
-    /* 7. Noise texture overlay on welcome card */
-    .welcome { position: relative; overflow: hidden; }
-    .welcome::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-      background-size: 180px 180px;
-      opacity: 0.03;
-      pointer-events: none;
-      border-radius: inherit;
+    /* Chatbot input — real chat feel */
+    .chat-box {
+      width: 100%;
+      max-width: 100%;
+      background: var(--sur);
+      border: 1px solid var(--bor);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
     }
-    body.light-theme .welcome::before { opacity: 0.025; }
-
-    /* 8. Typing cursor blink */
-    @keyframes cursorBlink {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0; }
-    }
-    .typing-cursor {
-      display: inline-block;
-      width: 2px;
-      height: 1em;
-      background: var(--t3);
-      margin-left: 1px;
-      vertical-align: text-bottom;
-      animation: cursorBlink 0.9s step-end infinite;
+    .chat-box:focus-within {
+      border-color: var(--bor);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.06);
+      transform: translateY(-2px);
     }
 
-    /* 9. Feature pill entrance stagger */
-    .w-pill { opacity: 0; animation: welcomeIn 0.3s ease-out both; }
-    .w-pill:nth-child(1) { animation-delay: 0.33s; }
-    .w-pill:nth-child(2) { animation-delay: 0.39s; }
-    .w-pill:nth-child(3) { animation-delay: 0.45s; }
-    .w-pill:nth-child(4) { animation-delay: 0.51s; }
+    .chat-system-msg {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--bor);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--sur);
+    }
+
+    .chat-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--sur);
+      border: 1px solid var(--bor);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+
+    .chat-system-text {
+      font-size: 14px;
+      color: var(--t2);
+      line-height: 1.5;
+    }
+
+    .chat-input-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      background: var(--bg);
+    }
+
+    .chat-input-row input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 15px;
+      color: var(--t1);
+      font-family: inherit;
+      padding: 4px 0;
+    }
+
+    .chat-input-row input::placeholder {
+      color: var(--t3);
+    }
+
+    .chat-send-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--act);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .chat-send-btn:hover { opacity: 0.85; transform: scale(0.96); }
+    .chat-send-btn svg { color: #fff; }
+
+    /* Value prop cards below the hero */
+    .w-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 48px;
+    }
+
+    .w-card {
+      border: 1px solid var(--bor);
+      border-radius: 12px;
+      padding: 20px;
+      background: var(--sur);
+      transition: border-color 0.2s;
+    }
+    .w-card:hover { border-color: var(--act); }
+
+    .w-card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--bg);
+      border: 1px solid var(--bor);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+
+    .w-card-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--t1);
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+
+    .w-card-desc {
+      font-size: 12.5px;
+      color: var(--t3);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 640px) {
+      .w-cards { grid-template-columns: 1fr; }
+    }
 
     /* Reduced motion override */
     @media (prefers-reduced-motion: reduce) {
@@ -2248,7 +2406,7 @@
               <rect x="14" y="3" width="7" height="7"></rect>
               <rect x="14" y="14" width="7" height="7"></rect>
               <rect x="3" y="14" width="7" height="7"></rect>
-            </svg></span> ALL BRAND</span><span class="arr">▶</span></button>
+            </svg></span> ALL BRAND</span><span class="arr"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span></button>
       <div class="tl">
         <button class="tb" onclick="selAllBrand('Gambaran Umum',this)">Gambaran Umum</button>
         <button class="tb" onclick="selAllBrand('Dashboard Growth',this)">Dashboard Growth</button>
@@ -2262,7 +2420,7 @@
       <button class="bb" onclick="toggleBrand('rata',this)"><span style="color:var(--rata)"><span
             style="display:inline-flex; align-items:center; justify-content:center; width:36px; height:24px;"><img
               src="assets/images/brand/rata_logo.png" style="height:12px; width:auto;" alt="Rata"></span>
-          RATA</span><span class="arr">▼ </span></button>
+          RATA</span><span class="arr"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span></button>
       <div class="tl">
         <button class="tb" onclick="selTeam('rata','CS',this)">CS</button>
         <button class="tb" onclick="selTeam('rata','SCH',this)">SCH</button>
@@ -2274,7 +2432,7 @@
       <button class="bb" onclick="toggleBrand('tanam',this)"><span style="color:var(--tanam)"><span
             style="display:inline-flex; align-items:center; justify-content:center; width:36px; height:24px;"><img
               src="assets/images/brand/tanam_logo.png" style="height:18px; width:auto;" alt="Tanam"></span>
-          TANAM</span><span class="arr">▼ </span></button>
+          TANAM</span><span class="arr"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span></button>
       <div class="tl">
         <button class="tb" onclick="selTeam('tanam','CS',this)">CS</button>
         <button class="tb" onclick="selTeam('tanam','SCH',this)">SCH</button>
@@ -2286,8 +2444,7 @@
       <button class="bb" onclick="toggleBrand('vinir',this)"><span style="color:var(--vinir)"><span
             style="display:inline-flex; align-items:center; justify-content:center; width:36px; height:24px;"><img
               src="assets/images/brand/vinir_logo.png"
-              style="height:9px; width:auto; filter: invert(1) brightness(0.2);" alt="Vinir"></span> VINIR</span><span
-          class="arr">▼ </span></button>
+              style="height:9px; width:auto; filter: invert(1) brightness(0.2);" alt="Vinir"></span> VINIR</span><span class="arr"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span></button>
       <div class="tl">
         <button class="tb" onclick="selTeam('vinir','CS',this)">CS</button>
         <button class="tb" onclick="selTeam('vinir','SCH',this)">SCH</button>
@@ -2296,11 +2453,11 @@
       </div>
     </div>
     <div class="sidebar-divider"></div>
-    <span class="sidebar-section-label">Growth Ops Analytics</span>
+    <span class="sidebar-section-label">Management</span>
     <div class="bi br-goa" id="b-goa">
       <button class="bb" onclick="toggleBrand('goa',this)"><span style="color:var(--goa)"><span
             style="display:inline-flex; align-items:center; justify-content:center; width:36px; height:24px;">🔮</span>
-          GROWTH OPS ANALYTICS</span><span class="arr">▼ </span></button>
+          GROWTH OPS ANALYTICS</span><span class="arr"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span></button>
       <div class="tl">
         <button class="tb" onclick="selTeam('goa','Panduan Tim',this)">Panduan Tim</button>
         <button class="tb" onclick="selTeam('goa','Trace Progress',this)">Trace Progress</button>
@@ -2311,7 +2468,7 @@
 
   <!-- SUBNAV -->
   <nav id="subnav">
-    <span class="snh" id="snh">â</span>
+    <span class="snh" id="snh">â</span>
     <div id="subnav-body"></div>
   </nav>
 
@@ -2322,64 +2479,118 @@
       <!-- Welcome Screen -->
       <div class="welcome">
 
+        <!-- Botanical growth decoration (background SVG) -->
+        <svg class="welcome-botanical" viewBox="0 0 1120 520" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
+          <!-- Secondary faint vine: bottom-right to mid-left -->
+          <path class="vine-line vine-secondary" style="--delay:0.1s"
+            d="M 1145,510 C 1060,470 990,410 910,375 C 848,345 790,318 738,308"/>
+          <!-- Main vine: bottom-left curving up to top-right -->
+          <path class="vine-line" style="--delay:0.35s"
+            d="M -15,440 C 70,408 155,368 258,330 C 368,290 476,252 578,208 C 678,166 790,130 910,108 C 988,94 1058,82 1145,68"/>
+          <!-- Branch A off main vine at (258,330) → upper-left -->
+          <path class="vine-branch" style="--delay:1.05s"
+            d="M 258,330 C 246,302 240,272 234,242"/>
+          <!-- Leaf A tip -->
+          <path class="vine-leaf" style="--delay:1.65s"
+            d="M 232,240 C 222,226 208,222 213,236 C 216,246 228,250 232,240 Z"/>
+          <!-- Tiny counter-branch off A at (248,282) → right -->
+          <path class="vine-branch vine-tiny" style="--delay:1.25s"
+            d="M 248,284 C 260,278 274,282 284,292"/>
+          <!-- Leaf tiny branch -->
+          <path class="vine-leaf" style="--delay:1.85s"
+            d="M 285,293 C 295,298 304,292 298,283 C 294,277 284,278 285,293 Z"/>
+          <!-- Branch B off main vine at (578,208) → upward -->
+          <path class="vine-branch" style="--delay:1.3s"
+            d="M 578,208 C 570,182 572,154 582,130"/>
+          <!-- Leaf B tip -->
+          <path class="vine-leaf" style="--delay:1.9s"
+            d="M 583,128 C 578,112 563,106 567,120 C 570,130 581,134 583,128 Z"/>
+          <!-- Branch B2 off B at (576,168) → left -->
+          <path class="vine-branch vine-tiny" style="--delay:1.45s"
+            d="M 576,168 C 562,162 548,166 538,176"/>
+          <!-- Leaf B2 -->
+          <path class="vine-leaf" style="--delay:2.0s"
+            d="M 537,177 C 527,185 526,196 536,192 C 543,189 547,180 537,177 Z"/>
+          <!-- Branch C off main vine at (910,108) → upper-right -->
+          <path class="vine-branch" style="--delay:1.55s"
+            d="M 910,108 C 922,86 940,70 960,60"/>
+          <!-- Leaf C tip -->
+          <path class="vine-leaf" style="--delay:2.15s"
+            d="M 961,58 C 958,42 944,36 947,50 C 949,60 959,63 961,58 Z"/>
+          <!-- Junction buds -->
+          <circle class="vine-bud" cx="258" cy="330" r="2.8" style="--delay:1.05s"/>
+          <circle class="vine-bud" cx="248" cy="284" r="2" style="--delay:1.25s"/>
+          <circle class="vine-bud" cx="578" cy="208" r="2.8" style="--delay:1.3s"/>
+          <circle class="vine-bud" cx="576" cy="168" r="2" style="--delay:1.45s"/>
+          <circle class="vine-bud" cx="910" cy="108" r="2.8" style="--delay:1.55s"/>
+        </svg>
 
-        <!-- Icon -->
-        <div class="w-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="color:var(--t2)">
-            <path d="M7 14h10l-1 8H8l-1-8z"></path>
-            <path d="M12 14V6"></path>
-            <path d="M12 8c2.5 0 4.5-2 4.5-4.5S14.5 1.5 12 1.5"></path>
-            <path d="M12 10c-2 0-3.5-1.5-3.5-3.5S10 4.5 12 4.5"></path>
-          </svg>
-        </div>
-
+        <!-- Title -->
         <h1 class="w-title">Growth Ops Analytics Hub</h1>
+
+        <!-- Description -->
         <p class="w-desc">
-          Platform dokumentasi & analitik internal untuk <strong style="color:var(--t1);font-weight:600;">Tim Growth Ops Analytics</strong>.
+          Platform dokumentasi &amp; analitik internal untuk <strong style="color:var(--t1);font-weight:600;">Tim Growth Ops</strong>. Semua data, semua divisi, satu tempat.
         </p>
 
-        <!-- AI Search -->
-        <div class="w-search" style="width:100%;max-width:560px;margin-bottom:32px;">
-          <div id="chat-history" style="text-align:left;max-height:320px;overflow-y:auto;margin-bottom:12px;padding:0 4px;display:none;"></div>
-          <div class="ai-search-outer" id="ai-search-outer">
-          <div class="ai-search-wrap">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--t3);flex-shrink:0;">
-              <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-            </svg>
+        <!-- Chatbot — looks and feels like a chat -->
+        <div class="chat-box">
+          <div class="chat-system-msg">
+            <div class="chat-avatar" style="color: var(--t2);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 15h8l-1 6H9l-1-6Z" />
+                <path d="M12 15V5" />
+                <path d="M12 9a3 3 0 0 0-3-3 3 3 0 0 0 3 3" />
+                <path d="M12 5a3 3 0 0 1 3-3 3 3 0 0 1-3 3" />
+              </svg>
+            </div>
+            <span class="chat-system-text">Tanya apa saja tentang data, KPI, atau dokumentasi operasional.</span>
+          </div>
+          <div id="chat-history" style="display:none; max-height: 400px; overflow-y: auto; padding: 16px 20px; border-bottom: 1px solid var(--bor); scroll-behavior: smooth;"></div>
+          <div class="chat-input-row">
             <input type="text" id="ai-input"
-              style="flex:1;border:none;background:transparent;outline:none;font-size:14px;color:var(--t1);font-family:inherit;padding:4px 0;"
+              placeholder="Contoh: bagaimana performa RATA bulan ini?"
               onkeydown="if(event.key==='Enter') window.askAI()">
-            <button onclick="window.askAI()"
-              style="background:var(--act);color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:opacity 0.15s;">
-              Ask AI
+            <button class="chat-send-btn" onclick="window.askAI()" aria-label="Kirim pertanyaan">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+              </svg>
             </button>
           </div>
+        </div>
+
+        <!-- Value-prop cards -->
+        <div class="w-cards">
+          <div class="w-card">
+            <div class="w-card-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="color:var(--t2)">
+                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+            </div>
+            <div class="w-card-title">Dokumentasi Terpusat</div>
+            <div class="w-card-desc">SOP, flow kerja, dan panduan tim tersimpan rapi dan bisa diakses kapan saja.</div>
+          </div>
+          <div class="w-card">
+            <div class="w-card-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="color:var(--t2)">
+                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+              </svg>
+            </div>
+            <div class="w-card-title">AI Assistant</div>
+            <div class="w-card-desc">Tanya langsung ke AI untuk jawaban berdasarkan data internal dan dokumentasi tim.</div>
+          </div>
+          <div class="w-card">
+            <div class="w-card-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="color:var(--t2)">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+            </div>
+            <div class="w-card-title">Live Analytics</div>
+            <div class="w-card-desc">Data pipeline real-time dari PostgreSQL berisi KPI, metrik, dan laporan per divisi.</div>
           </div>
         </div>
 
-        <!-- Feature Pills -->
-        <div class="w-pills" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;max-width:600px;">
-          <div class="w-pill">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--t3)"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
-            <span style="font-size:13px;font-weight:500;color:var(--t2);">PostgreSQL</span>
-          </div>
-          <div class="w-pill">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--t3)"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 1 0 2.828 2.828l14.504-12.19z"></path><path d="m15 5 4 4"></path></svg>
-            <span style="font-size:13px;font-weight:500;color:var(--t2);">Google Drive</span>
-          </div>
-          <div class="w-pill">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--t3)"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-            <span style="font-size:13px;font-weight:500;color:var(--t2);">Notion Sync</span>
-          </div>
-          <div class="w-pill">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--t3)"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-            <span style="font-size:13px;font-weight:500;color:var(--t2);">Live Analytics</span>
-          </div>
-        </div>
-
-        <p class="w-hint" style="margin-top:24px;font-size:12px;color:var(--t3);">
-          Pilih brand dan divisi dari panel navigasi di sebelah kiri.
-        </p>
       </div><!-- /welcome -->
 
     </div><!-- /home-layout -->
@@ -2432,6 +2643,17 @@
       allbrand: 'rgba(138, 153, 173, 0.08)',
       goa: 'rgba(181, 95, 230, 0.08)'
     };
+    // Light-mode safe versions: transparent glow, soft 4% neutral tint
+    const ACBG_LIGHT = {
+      rata: 'rgba(244, 63, 94, 0.05)',
+      tanam: 'rgba(16, 185, 129, 0.05)',
+      vinir: 'rgba(59, 130, 246, 0.05)',
+      allbrand: 'rgba(138, 153, 173, 0.04)',
+      goa: 'rgba(181, 95, 230, 0.05)'
+    };
+    function _isLight() { return document.body.classList.contains('light-theme'); }
+    function _glow(brand) { return _isLight() ? 'transparent' : GLOWS[brand]; }
+    function _acbg(brand) { return _isLight() ? ACBG_LIGHT[brand] : ACBG[brand]; }
     let cBrand = null, cTeam = null, cSec = null, cSub = null;
 
     // ── NAV ────────────────────────────────────────────────────────────
@@ -2448,8 +2670,8 @@
     function selTeam(brand, team, btn) {
       cBrand = brand; cTeam = team; cSec = null; cSub = null;
       document.documentElement.style.setProperty('--act', COLORS[brand]);
-      document.documentElement.style.setProperty('--act-glow', GLOWS[brand]);
-      document.documentElement.style.setProperty('--acbg', ACBG[brand]);
+      document.documentElement.style.setProperty('--act-glow', _glow(brand));
+      document.documentElement.style.setProperty('--acbg', _acbg(brand));
       document.querySelectorAll('.tb').forEach(b => b.classList.remove('on'));
       if (btn) btn.classList.add('on');
       buildSubnav(brand, team);
@@ -2498,8 +2720,8 @@
     function selAllBrand(section, btn) {
       cBrand = 'allbrand'; cTeam = section; cSec = null; cSub = null;
       document.documentElement.style.setProperty('--act', COLORS.allbrand);
-      document.documentElement.style.setProperty('--act-glow', GLOWS.allbrand);
-      document.documentElement.style.setProperty('--acbg', ACBG.allbrand);
+      document.documentElement.style.setProperty('--act-glow', _glow('allbrand'));
+      document.documentElement.style.setProperty('--acbg', _acbg('allbrand'));
       document.querySelectorAll('.tb').forEach(b => b.classList.remove('on'));
       btn.classList.add('on');
       updateBC(); renderSection();
@@ -2859,11 +3081,12 @@
       const aiBorder = isLight ? 'rgba(15,23,42,0.08)' : 'rgba(255,255,255,0.2)';
       const aiShadow = isLight ? '0 2px 16px rgba(0,0,0,0.03), inset 0 1px 0 rgba(255,255,255,0.8)' : '0 2px 16px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.5)';
       aiMsg.innerHTML = `
-      <div style="width:32px;height:32px;background:linear-gradient(135deg,#1e293b,#334155);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.15);">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M7 14h10l-1 8H8l-1-8z"/><path d="M12 14V6"/>
-          <path d="M12 8c2.5 0 4.5-2 4.5-4.5S14.5 1.5 12 1.5"/>
-          <path d="M12 10c-2 0-3.5-1.5-3.5-3.5S10 4.5 12 4.5"/>
+      <div class="chat-avatar" style="color:var(--t2);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 15h8l-1 6H9l-1-6Z" />
+          <path d="M12 15V5" />
+          <path d="M12 9a3 3 0 0 0-3-3 3 3 0 0 0 3 3" />
+          <path d="M12 5a3 3 0 0 1 3-3 3 3 0 0 1-3 3" />
         </svg>
       </div>
       <div class="ai-content" style="background:transparent;border:1px solid ${aiBorder};padding:14px 18px;border-radius:20px 20px 20px 4px;font-size:14.5px;color:var(--t1);max-width:85%;box-shadow:${aiShadow};backdrop-filter:blur(48px) saturate(180%);-webkit-backdrop-filter:blur(48px) saturate(180%);">
@@ -3009,7 +3232,10 @@
         }
 
         aiMsg.querySelector('.ai-content').innerHTML = responseText;
-        setTimeout(() => aiMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 80);
+        setTimeout(() => {
+          const historyEl = document.getElementById('chat-history');
+          historyEl.scrollTo({ top: historyEl.scrollHeight, behavior: 'smooth' });
+        }, 80);
       }, 380);
     };
 
@@ -3113,6 +3339,12 @@
       // Reset inline body bg set by toggleBrand to let CSS take over
       body.style.background = '';
       body.style.backgroundColor = '';
+
+      // Re-apply glow/acbg with light-mode awareness
+      if (cBrand) {
+        document.documentElement.style.setProperty('--act-glow', _glow(cBrand));
+        document.documentElement.style.setProperty('--acbg', _acbg(cBrand));
+      }
     }
 
     // Apply saved theme on page load + set default breadcrumb
