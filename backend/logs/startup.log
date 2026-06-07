@@ -1,0 +1,16 @@
+{"timestamp": "2026-06-02T07:53:10.586468", "level": "INFO", "module": "logging_config", "function": "log_startup_event", "message": "Event: CHATBOT_INIT_SUCCESS - DeepSeek chatbot initialized", "line": 169}
+{"timestamp": "2026-06-02T07:53:10.586636", "level": "INFO", "module": "logging_config", "function": "log_startup_event", "message": "Event: CHATBOT_INIT_SUCCESS - DeepSeek chatbot initialized", "line": 169}
+{"timestamp": "2026-06-02T07:53:10.586864", "level": "INFO", "module": "logging_config", "function": "log_startup_event", "message": "Event: CHATBOT_INIT_SUCCESS - DeepSeek chatbot initialized", "line": 169}
+{"timestamp": "2026-06-02T07:53:10.591928", "level": "INFO", "module": "logging_config", "function": "log_startup_event", "message": "Event: CHATBOT_INIT_SUCCESS - DeepSeek chatbot initialized", "line": 169}
+{"timestamp": "2026-06-02T07:53:12.091831", "level": "INFO", "module": "logging_config", "function": "log_startup_event", "message": "Event: CHATBOT_INIT_SUCCESS - DeepSeek chatbot initialized", "line": 169}
+{"timestamp": "2026-06-02T07:53:12.091919", "level": "INFO", "module": "logging_config", "function": "log_startup_event", "message": "Event: CHATBOT_INIT_SUCCESS - DeepSeek chatbot initialized", "line": 169}
+{"timestamp": "2026-06-02T07:53:43.424377", "level": "INFO", "module": "logging_config", "function": "log_startup_event", "message": "Event: CHATBOT_INIT_SUCCESS - DeepSeek chatbot initialized", "line": 169}
+{"timestamp": "2026-06-02T07:53:43.424513", "level": "INFO", "module": "logging_config", "function": "log_startup_event", "message": "Event: CHATBOT_INIT_SUCCESS - DeepSeek chatbot initialized", "line": 169}
+{"timestamp": "2026-06-02T07:55:49.147816", "level": "INFO", "module": "logging_config", "function": "log_startup_event", "message": "Event: CHATBOT_INIT_SUCCESS - DeepSeek chatbot initialized", "line": 169}
+{"timestamp": "2026-06-02T07:55:49.147916", "level": "INFO", "module": "logging_config", "function": "log_startup_event", "message": "Event: CHATBOT_INIT_SUCCESS - DeepSeek chatbot initialized", "line": 169}
+{"timestamp": "2026-06-02T08:13:42.364363", "level": "INFO", "module": "logging_config", "function": "log_startup_event", "message": "Event: CHATBOT_INIT_SUCCESS - DeepSeek chatbot initialized", "line": 169}
+{"timestamp": "2026-06-02T08:13:42.364491", "level": "INFO", "module": "logging_config", "function": "log_startup_event", "message": "Event: CHATBOT_INIT_SUCCESS - DeepSeek chatbot initialized", "line": 169}
+{"timestamp": "2026-06-02T08:14:17.381148", "level": "INFO", "module": "logging_config", "function": "log_startup_event", "message": "Event: CHATBOT_INIT_SUCCESS - DeepSeek chatbot initialized", "line": 169}
+{"timestamp": "2026-06-02T08:14:17.381239", "level": "INFO", "module": "logging_config", "function": "log_startup_event", "message": "Event: CHATBOT_INIT_SUCCESS - DeepSeek chatbot initialized", "line": 169}
+{"timestamp": "2026-06-02T08:20:50.555946", "level": "INFO", "module": "logging_config", "function": "log_startup_event", "message": "Event: CHATBOT_INIT_SUCCESS - DeepSeek chatbot initialized", "line": 169}
+{"timestamp": "2026-06-02T08:20:50.556056", "level": "INFO", "module": "logging_config", "function": "log_startup_event", "message": "Event: CHATBOT_INIT_SUCCESS - DeepSeek chatbot initialized", "line": 169}
