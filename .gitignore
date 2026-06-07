@@ -1,5 +1,6 @@
 # Credentials — JANGAN di-push
 .env
+CREDENTIALS.md
 
 # Data source Excel (file besar, data internal)
 *.xlsx

@@ -2468,6 +2468,16 @@
         <button class="tb" onclick="selTeam('goa','Panduan Manager',this)" style="display:none;">Panduan Manager</button>
       </div>
     </div>
+    <div class="sidebar-divider"></div>
+    <span class="sidebar-section-label">Project</span>
+    <div class="bi br-project" id="b-project">
+      <button class="bb" onclick="toggleBrand('project',this)"><span style="color:#0ea5e9"><span
+            style="display:inline-flex; align-items:center; justify-content:center; width:36px; height:24px;">🦷</span>
+          PROJECT</span><span class="arr"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span></button>
+      <div class="tl">
+        <button class="tb" onclick="selProject(this)">Monitoring proporsi kasus Implant Gigi</button>
+      </div>
+    </div>
   </nav>
 
   <!-- SUBNAV -->
@@ -2786,6 +2796,9 @@
   <script src="data.js"></script>
   <script src="dashboard_data.js"></script>
   <script src="dashboard_context.js"></script>
+  <script src="implant_data.js"></script>
+  <script src="implant_context.js"></script>
+  <script src="implant_dashboard.js"></script>
   <script>
     // Visual Error Handler for local debugging & pair programming
     window.onerror = function (msg, url, lineNo, columnNo, error) {
@@ -2942,6 +2955,21 @@
       document.querySelectorAll('.tb').forEach(b => b.classList.remove('on'));
       btn.classList.add('on');
       updateBC(); renderSection();
+    }
+
+    function selProject(btn) {
+      cBrand = 'project'; cTeam = 'Implant Gigi'; cSec = null; cSub = null;
+      document.documentElement.style.setProperty('--act', '#0ea5e9');
+      document.documentElement.style.setProperty('--act-glow', 'rgba(14,165,233,0.15)');
+      document.documentElement.style.setProperty('--acbg', 'rgba(14,165,233,0.10)');
+      document.querySelectorAll('.tb').forEach(b => b.classList.remove('on'));
+      if (btn) btn.classList.add('on');
+      document.getElementById('bc').innerHTML = '<span style="color:var(--t3)">Growth Ops Hub</span><span style="opacity:.3;margin:0 6px;font-weight:400">/</span><b>Monitoring proporsi kasus Implant Gigi</b>';
+      if (typeof window.renderImplantProject === 'function') {
+        window.renderImplantProject(document.getElementById('content'));
+      } else {
+        document.getElementById('content').innerHTML = '<div style="padding:30px;color:#e24b4a">implant_dashboard.js belum dimuat.</div>';
+      }
     }
 
     function togglePresent() {
@@ -3527,6 +3555,7 @@
 
       const historyEl = document.getElementById('chat-history');
       historyEl.style.display = 'block';
+      window._chatHistory = window._chatHistory || [];
 
       const userMsg = document.createElement('div');
       userMsg.style.cssText = 'margin-bottom:16px;display:flex;justify-content:flex-end;';
@@ -3593,6 +3622,7 @@ Cara menjawab:
 - Pertanyaan gabungan → kombinasikan keduanya
 - Jangan pernah suruh user cek sheet sendiri jika datanya sudah tersedia di sini
 - Gunakan bahasa Indonesia. Format **bold** untuk highlight penting.
+- Ini percakapan berlanjut. Kalau user menjawab singkat (mis. "iya", "lanjut", "dalemi", "yang itu"), teruskan dari jawaban kamu sebelumnya sesuai riwayat chat. Jangan menyapa ulang dan jangan menganggap kata itu sebagai nama.
 
 KEMAMPUAN CHART: Jika user minta chart/grafik, generate menggunakan format ini persis (JANGAN tambahkan var/const untuk chart instance):
 \`\`\`html
@@ -3603,6 +3633,9 @@ Penting: gunakan pola echarts.init(...).setOption({...}) langsung, jangan pakai 
 
 === DATA DASHBOARD GROWTH ===
 ${dashboardCtx}
+
+=== DATA PROJECT: MONITORING IMPLANT GIGI ===
+${typeof IMPLANT_CONTEXT_TEXT !== 'undefined' ? IMPLANT_CONTEXT_TEXT : '(belum dimuat)'}
 
 === KONTEKS DOKUMENTASI TIM ===
 ${ctxSnippets || 'Tidak ada konteks dokumentasi ditemukan untuk pertanyaan ini.'}`.trim();
@@ -3619,6 +3652,7 @@ ${ctxSnippets || 'Tidak ada konteks dokumentasi ditemukan untuk pertanyaan ini.'
             model: 'deepseek-chat',
             messages: [
               { role: 'system', content: sysPrompt },
+              ...(window._chatHistory || []).slice(-10),
               { role: 'user', content: rawQuery }
             ],
             max_tokens: 2048,
@@ -3635,6 +3669,9 @@ ${ctxSnippets || 'Tidak ada konteks dokumentasi ditemukan untuk pertanyaan ini.'
         let raw = data.choices?.[0]?.message?.content || 'Maaf, tidak ada jawaban tersedia.';
         aiMsg.querySelector('.ai-content').innerHTML = window._renderAIResponse(raw);
         setTimeout(window._execPendingCharts, 80);
+        window._chatHistory.push({ role: 'user', content: rawQuery });
+        window._chatHistory.push({ role: 'assistant', content: raw });
+        if (window._chatHistory.length > 12) window._chatHistory = window._chatHistory.slice(-12);
 
       } catch (error) {
         console.error('DeepSeek error:', error);
