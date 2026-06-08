@@ -102,17 +102,17 @@
     '.imp table.mtx td.cell{text-align:center}.imp table.mtx td.diag{outline:2px solid var(--act,#0ea5e9);outline-offset:-2px}.imp table.mtx .pct{display:block;font-size:9px;color:var(--t3,#888);margin-top:1px}' +
 
     /* ── LIGHT THEME overrides — VSCode Light palette ── */
-    'body.light-theme .imp .fb{background:#f3f3f3;border-color:#e8e8e8}' +
-    'body.light-theme .imp .dd{background:#ffffff;border-color:#d4d4d4;color:#1e1e1e}' +
-    'body.light-theme .imp input[type=date]{background:#ffffff;border-color:#d4d4d4;color:#1e1e1e}' +
-    'body.light-theme .imp .ibtn{background:#ffffff;border-color:#d4d4d4;color:#1e1e1e}' +
-    'body.light-theme .imp .pn{background:#ffffff;border-color:#d4d4d4;box-shadow:0 4px 14px rgba(0,0,0,.10)}' +
-    'body.light-theme .imp .kpi{background:#ffffff;border-color:#e8e8e8}' +
-    'body.light-theme .imp .card{background:#ffffff;border-color:#e8e8e8}' +
-    'body.light-theme .imp table.t th,body.light-theme .imp table.t td{border-color:#e8e8e8}' +
-    'body.light-theme .imp .tabs{border-color:#e8e8e8}' +
-    'body.light-theme .imp .seg{border-color:#d4d4d4}' +
-    'body.light-theme .imp .seg button{border-color:#d4d4d4;color:#616161}' +
+    'body.light-theme .imp .fb{background:#eef2f7;border-color:#e2e8f0}' +
+    'body.light-theme .imp .dd{background:#ffffff;border-color:#cbd5e1;color:#1e293b}' +
+    'body.light-theme .imp input[type=date]{background:#ffffff;border-color:#cbd5e1;color:#1e293b}' +
+    'body.light-theme .imp .ibtn{background:#ffffff;border-color:#cbd5e1;color:#1e293b}' +
+    'body.light-theme .imp .pn{background:#ffffff;border-color:#cbd5e1;box-shadow:0 4px 14px rgba(0,0,0,.10)}' +
+    'body.light-theme .imp .kpi{background:#ffffff;border-color:#e2e8f0}' +
+    'body.light-theme .imp .card{background:#ffffff;border-color:#e2e8f0}' +
+    'body.light-theme .imp table.t th,body.light-theme .imp table.t td{border-color:#e2e8f0}' +
+    'body.light-theme .imp .tabs{border-color:#e2e8f0}' +
+    'body.light-theme .imp .seg{border-color:#cbd5e1}' +
+    'body.light-theme .imp .seg button{border-color:#cbd5e1;color:#475569}' +
     '</style>';
 
   function ddHtml(id, label, vals, key) {
