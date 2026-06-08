@@ -2,6 +2,35 @@
 .env
 CREDENTIALS.md
 
+# Dokumentasi internal (tidak dibutuhkan platform)
+IMPLEMENTATION_COMPLETE.md
+PRODUCTION_READINESS.md
+CHATBOT_STATUS.md
+DEEPSEEK_CHATBOT_SETUP.md
+DEPLOYMENT_GUIDE.md
+04-self-analisis-hub.md
+Timeline_Fairuz_30Hari.md
+
+# Script generator & tools internal
+generate_dashboard.py
+generate_implant_data.py
+legacy_to_pg.py
+notion_to_blocks.py
+setup_libs.py
+test_chatbot.py
+schema.sql
+
+# Folder backend & tools (tidak dipakai platform)
+backend/
+api/
+connection/
+db/
+notion/
+script/
+
+# AI assistant config
+.claude/
+
 # Data source Excel (file besar, data internal)
 *.xlsx
 *.xls
