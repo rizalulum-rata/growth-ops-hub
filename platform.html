@@ -51,12 +51,12 @@
     /* LIGHT THEME MIGRATION */
     body.light-theme {
       --bg: #ffffff;
-      --sur: #f4f4f5;
+      --sur: #f3f4f6;
       --bor: rgba(9, 9, 11, 0.08);
       --t1: #09090b;
       --t2: #71717a;
       --t3: #a1a1aa;
-      --b2: #f4f4f5;
+      --b2: #f3f4f6;
       --sep: rgba(9, 9, 11, 0.08);
       --b3: rgba(0, 0, 0, 0.02);
       --shadow-sm: none;
@@ -335,7 +335,7 @@
     }
 
     body.light-theme .step:hover {
-      background: #f9f9fb;
+      background: #f9fafb;
     }
 
     body.light-theme .steps {
@@ -2960,8 +2960,11 @@
     function selProject(btn) {
       cBrand = 'project'; cTeam = 'Implant Gigi'; cSec = null; cSub = null;
       document.documentElement.style.setProperty('--act', '#0ea5e9');
-      document.documentElement.style.setProperty('--act-glow', 'rgba(14,165,233,0.15)');
-      document.documentElement.style.setProperty('--acbg', 'rgba(14,165,233,0.10)');
+      document.documentElement.style.setProperty('--act-glow', _isLight() ? 'transparent' : 'rgba(14,165,233,0.12)');
+      document.documentElement.style.setProperty('--acbg', _isLight() ? 'rgba(14,165,233,0.06)' : 'rgba(14,165,233,0.10)');
+      // Reset any inline body bg carried over from previous brand
+      document.body.style.background = '';
+      document.body.style.backgroundColor = '';
       document.querySelectorAll('.tb').forEach(b => b.classList.remove('on'));
       if (btn) btn.classList.add('on');
       document.getElementById('bc').innerHTML = '<span style="color:var(--t3)">Growth Ops Hub</span><span style="opacity:.3;margin:0 6px;font-weight:400">/</span><b>Monitoring proporsi kasus Implant Gigi</b>';
